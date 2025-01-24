@@ -43,10 +43,8 @@ const DioConfig_t DioConfig[] =
  *  Port    Pin      Mode        Type           Speed          Resistor         Function
  *                
 */ 
-   {DIO_PA, DIO_PA4, DIO_OUTPUT,   DIO_PUSH_PULL, DIO_LOW_SPEED, DIO_NO_RESISTOR, DIO_AF5},
-   {DIO_PA, DIO_PA5, DIO_FUNCTION, DIO_PUSH_PULL, DIO_LOW_SPEED, DIO_NO_RESISTOR, DIO_AF5},
-   {DIO_PA, DIO_PA6, DIO_FUNCTION, DIO_PUSH_PULL, DIO_LOW_SPEED, DIO_NO_RESISTOR, DIO_AF5},
-   {DIO_PA, DIO_PA7, DIO_FUNCTION, DIO_PUSH_PULL, DIO_LOW_SPEED, DIO_NO_RESISTOR, DIO_AF5},
+   {DIO_PA, DIO_PA2, DIO_FUNCTION, DIO_PUSH_PULL, DIO_LOW_SPEED, DIO_PULLUP, DIO_AF7},
+   {DIO_PA, DIO_PA3, DIO_FUNCTION, DIO_PUSH_PULL, DIO_LOW_SPEED, DIO_PULLUP, DIO_AF7},
 };
 
 /*****************************************************************************
