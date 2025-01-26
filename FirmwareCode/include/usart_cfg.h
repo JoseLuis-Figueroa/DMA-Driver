@@ -46,4 +46,19 @@ typedef enum
     USART_MAX    /**< Defines the maximum USART port*/
 }UsartPort_t;
 
+/**
+ * Defines the USART data word length.
+*/
+typedef enum
+{
+    USART_WORD_LENGTH_8,   /**< Defines bits: start 1, data 8, stop n*/
+    USART_WORD_LENGTH_9,   /**< Defines bits: start 1, data 9, stop n*/
+    USART_WORD_LENGTH_MAX  /**< Defines the maximum data bits*/
+}UsartWordLength_t;
+
+
+
+
+
 #endif /*USART_CFG_H_*/
+
