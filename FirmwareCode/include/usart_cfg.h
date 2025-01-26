@@ -78,6 +78,35 @@ typedef enum
     USART_PARITY_MAX        /**< Defines the maximum parity*/
 }UsartParity_t;
 
+/**
+ * Defines the USART RX mode.
+*/
+typedef enum
+{
+    USART_RX_DISABLED,      /**< Defines the RX disabled*/
+    USART_RX_ENABLED,       /**< Defines the RX enabled*/
+    USART_RX_MAX            /**< Defines the maximum RX mode*/
+}UsartRx_t;
+
+/**
+ * Defines the USART TX mode.
+*/
+typedef enum
+{
+    USART_TX_DISABLED,      /**< Defines the TX disabled*/
+    USART_TX_ENABLED,       /**< Defines the TX enabled*/
+    USART_TX_MAX            /**< Defines the maximum TX mode*/
+}UsartTx_t;
+
+/**
+ * Defines the USART enable. 
+*/
+typedef enum
+{
+    USART_DISABLED,         /**< Defines the USART disabled*/
+    USART_ENABLED,          /**< Defines the USART enabled*/
+    USART_MAX               /**< Defines the maximum USART enable*/
+}UsartEnable_t;
 
 
 #endif /*USART_CFG_H_*/
