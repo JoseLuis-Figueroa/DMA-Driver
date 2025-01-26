@@ -99,6 +99,26 @@ typedef enum
 }UsartTx_t;
 
 /**
+ * Defines the USART RX DMA mode.
+*/
+typedef enum
+{
+    USART_RX_DMA_DISABLED,  /**< Defines the RX DMA disabled*/
+    USART_RX_DMA_ENABLED,   /**< Defines the RX DMA enabled*/
+    USART_RX_DMA_MAX        /**< Defines the maximum RX DMA mode*/
+}UsartRxDma_t;
+
+/**
+ * Defines the USART TX DMA mode.
+*/
+typedef enum
+{
+    USART_TX_DMA_DISABLED,  /**< Defines the TX DMA disabled*/
+    USART_TX_DMA_ENABLED,   /**< Defines the TX DMA enabled*/
+    USART_TX_DMA_MAX        /**< Defines the maximum TX DMA mode*/
+}UsartTxDma_t;
+
+/**
  * Defines the USART enable. 
 */
 typedef enum
