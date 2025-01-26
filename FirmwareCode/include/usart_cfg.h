@@ -56,7 +56,27 @@ typedef enum
     USART_WORD_LENGTH_MAX  /**< Defines the maximum data bits*/
 }UsartWordLength_t;
 
+/**
+ * Defines the USART stop bits.
+*/
+typedef enum
+{
+    USART_STOP_BITS_1_5,     /**< Defines 1 stop bit*/
+    USART_STOP_BITS_0_5,   /**< Defines 0.5 stop bits*/
+    USART_STOP_BITS_2,     /**< Defines 2 stop bits*/
+    USART_STOP_BITS_1_5,   /**< Defines 1.5 stop bits*/
+    USART_STOP_BITS_MAX    /**< Defines the maximum stop bits*/
+}UsartStopBits_t;
 
+/**
+ * Defines the USART parity.
+*/ 
+typedef enum
+{
+    USART_PARITY_DISABLED,  /**< Defines no parity*/
+    USART_PARITY_ENABLED,   /**< Defines even parity*/
+    USART_PARITY_MAX        /**< Defines the maximum parity*/
+}UsartParity_t;
 
 
 
