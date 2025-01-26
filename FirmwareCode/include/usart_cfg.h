@@ -108,6 +108,21 @@ typedef enum
     USART_MAX               /**< Defines the maximum USART enable*/
 }UsartEnable_t;
 
+/**
+ * Defines the USART baud rates.
+*/
+typedef enum
+{
+    USART_BAUD_RATE_9600   = 9600,   /**< Defines the baud rate 9600*/
+    USART_BAUD_RATE_19200  = 19200,  /**< Defines the baud rate 19200*/
+    USART_BAUD_RATE_38400  = 38400,  /**< Defines the baud rate 38400*/
+    USART_BAUD_RATE_57600  = 57600,  /**< Defines the baud rate 57600*/
+    USART_BAUD_RATE_115200 = 115200, /**< Defines the baud rate 115200*/
+    USART_BAUD_RATE_230400 = 230400, /**< Defines the baud rate 230400*/
+    USART_BAUD_RATE_460800 = 460800, /**< Defines the baud rate 460800*/
+    USART_BAUD_RATE_921600 = 921600, /**< Defines the baud rate 921600*/
+    USART_BAUD_RATE_MAX              /**< Defines the maximum baud rate*/
+}UsartBaudRate_t;
 
 #endif /*USART_CFG_H_*/
 
