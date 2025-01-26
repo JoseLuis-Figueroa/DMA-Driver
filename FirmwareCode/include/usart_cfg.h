@@ -30,3 +30,20 @@
  * Set the value according with the number of USART peripheral
 */
 #define USART_PORTS_NUMBER 1U
+
+/*****************************************************************************
+ * Typedefs
+******************************************************************************/
+/**
+ * Defines the USART ports contained on the MCU device. It is used to specify
+ * the specific USART peripheral to configure the register map.
+*/
+typedef enum
+{
+    USART1,      /**< USART1 */
+    USART2,      /**< USART2 */
+    USART6,      /**< USART6 */
+    USART_MAX    /**< Defines the maximum USART port*/
+}UsartPort_t;
+
+#endif /*USART_CFG_H_*/
