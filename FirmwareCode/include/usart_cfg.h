@@ -3,7 +3,7 @@
  * @author Jose Luis Figueroa 
  * @brief This module contains interface definitions for the USART
  * configuration. This is the header file for the definition of the
- * interface for retrieving the Universal Asynchronous Receiver
+ * interface for retrieving the Universal Synchronous/Asynchronous Receiver
  * Transmitter configuration table.
  * @version 1.0
  * @date 2025-01-26
@@ -61,7 +61,7 @@ typedef enum
 */
 typedef enum
 {
-    USART_STOP_BITS_1_5,     /**< Defines 1 stop bit*/
+    USART_STOP_BITS_1,     /**< Defines 1 stop bit*/
     USART_STOP_BITS_0_5,   /**< Defines 0.5 stop bits*/
     USART_STOP_BITS_2,     /**< Defines 2 stop bits*/
     USART_STOP_BITS_1_5,   /**< Defines 1.5 stop bits*/
@@ -145,9 +145,9 @@ typedef enum
 }UsartBaudRate_t;
 
 /**
- * Defines the Universal Asynchronous Receiver Transmitter configuration table.
- * This table is used to configure the USART peripheral in the Dio_Init 
- * function.
+ * Defines the Universal Synchronous/Asynchronous Receiver Transmitter
+ * configuration table. This table is used to configure the USART 
+ * peripheral in the Dio_Init function.
 */
 typedef struct
 {
@@ -174,5 +174,7 @@ const UsartConfig_t * const USART_configGet(void);
 
 #ifdef __cplusplus
 } // extern C
+#endif
+
 #endif /*USART_CFG_H_*/
 
