@@ -144,5 +144,35 @@ typedef enum
     USART_BAUD_RATE_MAX              /**< Defines the maximum baud rate*/
 }UsartBaudRate_t;
 
+/**
+ * Defines the Universal Asynchronous Receiver Transmitter configuration table.
+ * This table is used to configure the USART peripheral in the Dio_Init 
+ * function.
+*/
+typedef struct
+{
+    UsartPort_t         Port;       /**< USART port*/
+    UsartWordLength_t   WordLength; /**< 8 data bits or 9 data bits*/
+    UsartStopBits_t     StopBits;   /**< 1, 0.5, 2, or 1.5 stop bits*/
+    UsartParity_t       Parity;     /**< Enable or disable parity bit*/
+    UsartRx_t           Rx;         /**< Enable or disable RX mode*/
+    UsartTx_t           Tx;         /**< Enable or disable TX mode*/
+    UsartRxDma_t        RxDma;      /**< Enable or disable RX DMA mode*/
+    UsartTxDma_t        TxDma;      /**< Enable or disable TX DMA mode*/
+    UsartEnable_t       Enable;     /**< USART or disable enable*/
+    UsartBaudRate_t     BaudRate;   /**< USART baud rate*/
+}UsartConfig_t;
+
+/*****************************************************************************
+ * Function Prototypes
+ *****************************************************************************/
+#ifdef __cplusplus
+extern "C"{
+#endif
+
+const UsartConfig_t * const USART_configGet(void);
+
+#ifdef __cplusplus
+} // extern C
 #endif /*USART_CFG_H_*/
 
