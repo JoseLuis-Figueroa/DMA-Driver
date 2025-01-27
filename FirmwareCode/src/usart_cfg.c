@@ -45,3 +45,47 @@ const UsartConfig_t UsartConfig[] =
    USART_RX_ENABLED, USART_TX_ENABLED, USART_RX_DMA_DISABLED, 
    USART_TX_DMA_DISABLED, USART_ENABLED, USART_BAUD_RATE_9600},
 };  
+
+/*****************************************************************************
+ * Function Prototypes
+*****************************************************************************/
+
+/*****************************************************************************
+ * Function Definitions
+*****************************************************************************/
+/*****************************************************************************
+ * Function: Usart_configGet()
+ */
+/**
+ * \b Description
+ * This function is used to initialize the USART based on the configuration 
+ * table defined in usart_cfg module.
+ * 
+ * PRE-CONDITION: The configuration table needs to be populated (sizeof > 0)
+ * POST-CONDITION: A constant pointer to the first member of the configuration
+ * table is returned.
+ * @return A pointer to the configuration table.
+ * 
+ * \b Example:
+ * @code
+ * const UsartConfig_t * const UsartConfig = Usart_configGet();
+ * 
+ * USART_Init(UsartConfig);
+ * @endcode
+ * 
+ * @see USART_Init
+ * @see USART_Transmit
+ * @see USART_Receive
+ * @see USART_registerWrite
+ * @see USART_registerRead
+ * 
+*****************************************************************************/
+const UsartConfig_t * const USART_configGet(void)
+{
+    /* The cast is performed to ensure that the address of the first element 
+     * of configuration table is returned as a constant pointer and not a
+     * pointer that can be modified
+    */
+    return (const UsartConfig_t *)&UsartConfig[0];
+    
+}
