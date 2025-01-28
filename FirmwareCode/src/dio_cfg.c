@@ -58,7 +58,7 @@ const DioConfig_t DioConfig[] =
  * Function: DIO_configGet()
 */
 /**
-*\b Description:
+ *\b Description:
  * This function is used to initialize the DIO based on the configuration
  * table defined in dio_cfg module.
  * 

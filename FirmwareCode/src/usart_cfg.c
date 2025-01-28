@@ -38,7 +38,9 @@
 const UsartConfig_t UsartConfig[] = 
 {
 /*                                                          
- *  Port    WordLength    StopBits    BaudRate    RxMode    TxMode    RxDma    TxDma    Enable
+ *  Port          WordLength        StopBits          Parity
+ *  RxMode            TxMode                RxDma    
+ *  TxDma                 USART Enabler     BaudRate 
  *                
 */ 
    {USART2, USART_WORD_LENGTH_8, USART_STOP_BITS_1, USART_PARITY_DISABLED,
