@@ -40,6 +40,7 @@
 /*****************************************************************************
 * Variables
 *****************************************************************************/
+uint8_t errorCodeFlag = USART_ERROR_CODE_NONE; /**< Error code flag*/
 
 /*****************************************************************************
  * Function Prototypes
@@ -48,11 +49,12 @@
 extern "C"{
 #endif
 
-void USART_init(const UsartConfig_t * const Config);
+void USART_init(const UsartConfig_t * const Config, const uint32_t peripheralClock);
 void USART_transmit(const UsartPort_t Port, const uint8_t * const Data);
 void USART_receive(const UsartPort_t Port);
 void USART_registerWrite(uint32_t address, uint32_t value);
 uint32_t USART_registerRead(uint32_t address);
+static uint16_t USART_baudRateCalculate(const uint32_t peripheralClock, const uint32_t BaudRate);
 
 #ifdef __cplusplus
 } // extern C
