@@ -40,10 +40,10 @@
 */
 typedef enum
 {
-    USART1,      /**< USART1 */
-    USART2,      /**< USART2 */
-    USART6,      /**< USART6 */
-    USART_MAX    /**< Defines the maximum USART port*/
+    USART_PORT_1,      /**< USART1 */
+    USART_PORT_2,      /**< USART2 */
+    USART_PORT_6,      /**< USART6 */
+    USART_PORT_MAX     /**< Defines the maximum USART port*/
 }UsartPort_t;
 
 /**
@@ -125,7 +125,7 @@ typedef enum
 {
     USART_DISABLED,         /**< Defines the USART disabled*/
     USART_ENABLED,          /**< Defines the USART enabled*/
-    USART_MAX               /**< Defines the maximum USART enable*/
+    USART_UE_MAX            /**< Defines the maximum USART enable*/
 }UsartEnable_t;
 
 /**
