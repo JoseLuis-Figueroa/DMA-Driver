@@ -67,6 +67,8 @@ static uint32_t volatile * const dataRegister[USART_PORTS_NUMBER] =
 /*****************************************************************************
 * Function Prototypes
 *****************************************************************************/
+static uint16_t USART_baudRateCalculate(const uint32_t peripheralClock, 
+const uint32_t BaudRate);
 
 /*****************************************************************************
 * Function Definitions
@@ -111,9 +113,10 @@ void USART_init(const UsartConfig_t * const Config, const uint32_t peripheralClo
     for(uint8_t i=0; i<USART_USED_PORTS; i++)
     {
         /*Review if the USART port is correct*/
-        if(Config[i].Port >= USART_MAX)
+        if(Config[i].Port >= USART_PORT_MAX)
         {
-            errorCodeFlag = USART_ERROR_CODE_PORT;
+            //errorCodeFlag = USART_ERROR_CODE_PORT;
+            assert(0);
         }
 
         /* Set the configuration of the USART on the control register 1*/
@@ -128,7 +131,8 @@ void USART_init(const UsartConfig_t * const Config, const uint32_t peripheralClo
         }
         else if(Config[i].WordLength >= USART_WORD_LENGTH_MAX)
         {
-            errorCodeFlag = USART_ERROR_CODE_WORD_LENGTH;
+            //errorCodeFlag = USART_ERROR_CODE_WORD_LENGTH;
+            assert(0);
         }
 
         /* Set the number of stop bits */
@@ -154,7 +158,8 @@ void USART_init(const UsartConfig_t * const Config, const uint32_t peripheralClo
         }
         else if(Config[i].StopBits >= USART_STOP_BITS_MAX)
         {
-            errorCodeFlag = USART_ERROR_CODE_STOP_BITS;
+            //errorCodeFlag = USART_ERROR_CODE_STOP_BITS;
+            assert(0);
         }
 
         /* Set the parity */
@@ -168,7 +173,8 @@ void USART_init(const UsartConfig_t * const Config, const uint32_t peripheralClo
         }
         else if(Config[i].Parity >= USART_PARITY_MAX)
         {
-            errorCodeFlag = USART_ERROR_CODE_PARITY;
+            //errorCodeFlag = USART_ERROR_CODE_PARITY;
+            assert(0);
         }
 
         /* Set the RX mode */
@@ -182,7 +188,8 @@ void USART_init(const UsartConfig_t * const Config, const uint32_t peripheralClo
         }
         else if(Config[i].Rx >= USART_RX_MAX)
         {
-            errorCodeFlag = USART_ERROR_CODE_RX;
+            //errorCodeFlag = USART_ERROR_CODE_RX;
+            assert(0);
         }
 
         /* Set the TX mode */
@@ -196,7 +203,8 @@ void USART_init(const UsartConfig_t * const Config, const uint32_t peripheralClo
         }
         else if(Config[i].Tx >= USART_TX_MAX)
         {
-            errorCodeFlag = USART_ERROR_CODE_TX;
+            //errorCodeFlag = USART_ERROR_CODE_TX;
+            assert(0);
         }
 
         /* Set the RX DMA mode */
@@ -210,7 +218,8 @@ void USART_init(const UsartConfig_t * const Config, const uint32_t peripheralClo
         }
         else if(Config[i].RxDma >= USART_RX_DMA_MAX)
         {
-            errorCodeFlag = USART_ERROR_CODE_RX_DMA;
+            //errorCodeFlag = USART_ERROR_CODE_RX_DMA;
+            assert(0);
         }
 
         /* Set the TX DMA mode */
@@ -224,7 +233,8 @@ void USART_init(const UsartConfig_t * const Config, const uint32_t peripheralClo
         }
         else if(Config[i].TxDma >= USART_TX_DMA_MAX)
         {
-            errorCodeFlag = USART_ERROR_CODE_TX_DMA;
+            //errorCodeFlag = USART_ERROR_CODE_TX_DMA;
+            assert(0);
         }
 
         /* Set the enable */
@@ -236,9 +246,10 @@ void USART_init(const UsartConfig_t * const Config, const uint32_t peripheralClo
         {
             *controlRegister1[Config[i].Port] &= ~USART_CR1_UE;
         }
-        else if(Config[i].Enable >= USART_MAX)
+        else if(Config[i].Enable >= USART_UE_MAX)
         {
-            errorCodeFlag = USART_ERROR_CODE_ENABLE;
+            //errorCodeFlag = USART_ERROR_CODE_ENABLE;
+            assert(0);
         }
 
         /* Set the baud rate */
@@ -264,7 +275,8 @@ void USART_init(const UsartConfig_t * const Config, const uint32_t peripheralClo
         }
         else if(Config[i].BaudRate >= USART_BAUD_RATE_MAX)
         {
-            errorCodeFlag = USART_ERROR_CODE_BAUD_RATE;
+            //errorCodeFlag = USART_ERROR_CODE_BAUD_RATE;
+            assert(0);
         }
     
     }
@@ -300,16 +312,21 @@ void USART_init(const UsartConfig_t * const Config, const uint32_t peripheralClo
     * @see USART_registerWrite
     * @see USART_registerRead
 *****************************************************************************/
-void USART_transmit(const UsartPort_t Port, const uint8_t * const data)
+void USART_transmit(const UsartPort_t Port, const char * const data)
 {
-    /* Wait for the transmit buffer to be empty */
-    while(!(*statusRegister[Port] & USART_SR_TXE))
+    const char *auxiliarPointer = data;
+    while(*auxiliarPointer != '\0')
     {
-        asm("nop");
-    }
+        /* Wait for the transmit buffer to be empty */
+        while(!(*statusRegister[Port] & USART_SR_TXE))
+        {
+            asm("nop");
+        }
 
-    /* Transmit the data */
-    *dataRegister[Port] = *data;
+        /* Transmit the data */
+        *dataRegister[Port] = *auxiliarPointer;
+        auxiliarPointer++;
+    }
 }
 
 /*****************************************************************************
