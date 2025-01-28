@@ -353,6 +353,85 @@ void USART_receive(const UsartPort_t Port, uint8_t * const data)
 }
 
 /*****************************************************************************
+ * Function: USART_registerWrite()
+ *//**
+    * \b Description:
+    * This function is used to directly address and modify a USART register.
+    * The function should be used to access specialized functionality in 
+    * the SPI peripheral that is not exposed by any other function of the
+    * interface.
+    * 
+    * PRE-CONDITION: The USART peripheral must be initialized (USART_init).
+    * PRE-CONDITION: Address is within the boundaries of the USART register
+    *                map.
+    * 
+    * POST-CONDITION: The data is written to the address.
+    * 
+    * @param[in]   address is the address of the register to write to.
+    * @param[in]   value is the value to write to the USART register.
+    * 
+    * @return void
+    * 
+    * \b Example:
+    * @code
+    * USART_registerWrite(USART2, 0x01);
+    * @endcode
+    * 
+    * @see USART_ConfigGet
+    * @see USART_Init
+    * @see USART_Transmit
+    * @see USART_Receive
+    * @see USART_registerWrite
+    * @see USART_registerRead
+    *
+*****************************************************************************/
+void USART_registerWrite(const uint32_t address, const uint32_t value)
+{
+    /* Write the value to the address */
+    volatile uint32_t * const registerPointer = (uint32_t*)address;
+    *registerPointer = value;
+}
+
+/*****************************************************************************
+ * Function: USART_registerRead()
+ *//**
+    * \b Description:
+    * This function is used to directly address and read a USART register.
+    * The function should be used to access specialized functionality in 
+    * the USART peripheral that is not exposed by any other function of the
+    * interface.
+    * 
+    * PRE-CONDITION: The USART peripheral must be initialized (USART_init).
+    * PRE-CONDITION: Address is within the boundaries of the USART register
+    *                map.
+    * 
+    * POST-CONDITION: The data is read from the address.
+    * 
+    * @param[in]   address is the address of the register to read from.
+    * 
+    * @return the value of the register.
+    * 
+    * \b Example:
+    * @code
+    * uint32_t value = USART_registerRead(USART2);
+    * @endcode
+    * 
+    * @see USART_ConfigGet
+    * @see USART_Init
+    * @see USART_Transmit
+    * @see USART_Receive
+    * @see USART_registerWrite
+    * @see USART_registerRead
+    * 
+*****************************************************************************/
+uint32_t USART_registerRead(const uint32_t address)
+{
+    /* Read the value from the address */
+    volatile uint32_t * const registerPointer = (uint32_t*)address;
+    return *registerPointer;
+}
+
+/*****************************************************************************
  * Function: USART_baudRateCalculate()
 *//**
     *\b Description:
