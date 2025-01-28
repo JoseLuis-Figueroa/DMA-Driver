@@ -50,10 +50,10 @@ extern "C"{
 #endif
 
 void USART_init(const UsartConfig_t * const Config, const uint32_t peripheralClock);
-void USART_transmit(const UsartPort_t Port, const uint8_t * const Data);
-void USART_receive(const UsartPort_t Port);
-void USART_registerWrite(uint32_t address, uint32_t value);
-uint32_t USART_registerRead(uint32_t address);
+void USART_transmit(const UsartPort_t Port, const uint8_t * const data);
+void USART_receive(const UsartPort_t Port, uint8_t * const data);
+void USART_registerWrite(const uint32_t address, const uint32_t value);
+uint32_t USART_registerRead(const uint32_t address);
 static uint16_t USART_baudRateCalculate(const uint32_t peripheralClock, const uint32_t BaudRate);
 
 #ifdef __cplusplus

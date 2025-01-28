@@ -74,35 +74,36 @@ static uint32_t volatile * const dataRegister[USART_PORTS_NUMBER] =
 /*****************************************************************************
  * Function: USART_init()
 *//**
- *\b Description:
- * This function is used to initialize the USART based on the configuration
- * table defined in usart_cfg module.
- * 
- * PRE-CONDITION: The MCU clocks must be configured and enabled.
- * PRE-CONDITION: The USART_PORTS_NUMBER > 0 
- * PRE-CONDITION: Configuration table needs to be populated (sizeof > 0) <br>
- * 
- * POST-CONDITION: The USART peripheral is set up with the configuration
- * table.
- * 
- * @param[in]   Config is a pointer to the configuration table that contains
- * the initialization for the peripheral.
- * @param[in]   peripheralClock is the frequency of the system clock.
- * 
- * @return void
- * 
- * \b Example:
- * @code
- * const UsartConfig_t * const UsartConfig = Usart_configGet();
- * USART_Init(UsartConfig);
- * @endcode
- * 
- * @see USART_Init
- * @see USART_Transmit
- * @see USART_Receive
- * @see USART_registerWrite
- * @see USART_registerRead
- * 
+    *\b Description:
+    * This function is used to initialize the USART based on the configuration
+    * table defined in usart_cfg module.
+    * 
+    * PRE-CONDITION: The MCU clocks must be configured and enabled.
+    * PRE-CONDITION: The USART_PORTS_NUMBER > 0 
+    * PRE-CONDITION: Configuration table needs to be populated (sizeof>0) <br>
+    * 
+    * POST-CONDITION: The USART peripheral is set up with the configuration
+    * table.
+    * 
+    * @param[in]   Config is a pointer to the configuration table that contains
+    * the initialization for the peripheral.
+    * @param[in]   peripheralClock is the frequency of the system clock.
+    * 
+    * @return void
+    * 
+    * \b Example:
+    * @code
+    * const UsartConfig_t * const UsartConfig = Usart_configGet();
+    * USART_Init(UsartConfig);
+    * @endcode
+    * 
+    * @see USART_ConfigGet
+    * @see USART_Init
+    * @see USART_Transmit
+    * @see USART_Receive
+    * @see USART_registerWrite
+    * @see USART_registerRead
+    * 
 *****************************************************************************/
 void USART_init(const UsartConfig_t * const Config, const uint32_t peripheralClock)
 {
@@ -270,32 +271,115 @@ void USART_init(const UsartConfig_t * const Config, const uint32_t peripheralClo
 }
 
 /*****************************************************************************
+ * Function: USART_transmit()
+ * 
+ *//**
+    * \b Description:
+    * This function is used to transmit data over the USART bus.
+    * 
+    * PRE-CONDITION: The USART peripheral must be initialized (USART_init).
+    * PRE-CONDITION: The data must be populated.
+    * 
+    * POST-CONDITION: The data is transmitted over the USART bus.
+    * 
+    * @param[in]   Port is the USART port to transmit data. Populate using the 
+    *              UsartPort_t Port enum.
+    * @param[in]   Data is the data to be transmitted.
+    * 
+    * @return void
+    * 
+    * \b Example:
+    * @code
+    * USART_transmit(USART2, "H");
+    * @endcode
+    * 
+    * @see USART_ConfigGet
+    * @see USART_Init
+    * @see USART_Transmit
+    * @see USART_Receive
+    * @see USART_registerWrite
+    * @see USART_registerRead
+*****************************************************************************/
+void USART_transmit(const UsartPort_t Port, const uint8_t * const data)
+{
+    /* Wait for the transmit buffer to be empty */
+    while(!(*statusRegister[Port] & USART_SR_TXE))
+    {
+        asm("nop");
+    }
+
+    /* Transmit the data */
+    *dataRegister[Port] = *data;
+}
+
+/*****************************************************************************
+ * Function: USART_receive()
+ *//**
+    * \b Description:
+    * This function is used to receive data over the USART bus.
+    * 
+    * PRE-CONDITION: The USART peripheral must be initialized (USART_init).
+    * 
+    * POST-CONDITION: The data is received over the USART bus.
+    * 
+    * @param[in]   Port is the USART port to receive data. Populate using the 
+    *              UsartPort_t Port enum.
+    * 
+    * @return void
+    * 
+    * \b Example:
+    * @code
+    * USART_receive(USART2);
+    * @endcode
+    * 
+    * @see USART_ConfigGet
+    * @see USART_Init
+    * @see USART_Transmit
+    * @see USART_Receive
+    * @see USART_registerWrite
+    * @see USART_registerRead
+    * 
+*****************************************************************************/
+void USART_receive(const UsartPort_t Port, uint8_t * const data)
+{
+    /* Wait for the receive buffer to be full */
+    while(!(*statusRegister[Port] & USART_SR_RXNE))
+    {
+        asm("nop");
+    }
+
+    /* Read the data */
+    *data = *dataRegister[Port];
+}
+
+/*****************************************************************************
  * Function: USART_baudRateCalculate()
 *//**
-*\b Description:
- * This function is used to calculate the baud rate based on the peripheral. 
- * 
- * PRE-CONDITION: The peripheral clock must be configured and enabled.
- * PRE-CONDITION: The baud rate must be defined.
- * 
- * POST-CONDITION: The baud rate is calculated.
- * 
- * @param[in]   peripheralClock is the frequency of the system clock.
- * @param[in]   BaudRate is the baud rate of the USART.
- * 
- * @return the calculated baud rate.
- * 
- * \b Example:
- * @code
- * uint16_t baudRate = USART_baudRateCalculate(peripheralClock, BaudRate);
- * @endcode
- * 
- * @see USART_Init
- * @see USART_Transmit
- * @see USART_Receive
- * @see USART_registerWrite
- * @see USART_registerRead
- *
+    *\b Description:
+    * This function is used to calculate the baud rate based on the peripheral. 
+    * 
+    * PRE-CONDITION: The peripheral clock must be configured and enabled.
+    * PRE-CONDITION: The baud rate must be defined.
+    * 
+    * POST-CONDITION: The baud rate is calculated.
+    * 
+    * @param[in]   peripheralClock is the frequency of the system clock.
+    * @param[in]   BaudRate is the baud rate of the USART.
+    * 
+    * @return the calculated baud rate.
+    * 
+    * \b Example:
+    * @code
+    * uint16_t baudRate = USART_baudRateCalculate(peripheralClock, BaudRate);
+    * @endcode
+    * 
+    * @see USART_ConfigGet
+    * @see USART_Init
+    * @see USART_Transmit
+    * @see USART_Receive
+    * @see USART_registerWrite
+    * @see USART_registerRead
+    *
 *****************************************************************************/
 static uint16_t USART_baudRateCalculate(const uint32_t peripheralClock, const uint32_t BaudRate)
 {
