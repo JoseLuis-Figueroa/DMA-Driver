@@ -160,25 +160,6 @@ typedef struct
     UsartBaudRate_t     BaudRate;   /**< USART baud rate*/
 }UsartConfig_t;
 
-/**
- * Defines the error code list for the USART configuration module.
- */
-typedef enum
-{
-    USART_ERROR_CODE_NONE,       /**< No error*/
-    USART_ERROR_CODE_PORT,       /**< Invalid port*/
-    USART_ERROR_CODE_WORD_LENGTH,/**< Invalid word length*/
-    USART_ERROR_CODE_STOP_BITS,  /**< Invalid stop bits*/
-    USART_ERROR_CODE_PARITY,     /**< Invalid parity*/
-    USART_ERROR_CODE_RX,         /**< Invalid RX mode*/
-    USART_ERROR_CODE_TX,         /**< Invalid TX mode*/
-    USART_ERROR_CODE_RX_DMA,     /**< Invalid RX DMA mode*/
-    USART_ERROR_CODE_TX_DMA,     /**< Invalid TX DMA mode*/
-    USART_ERROR_CODE_ENABLE,     /**< Invalid enable*/
-    USART_ERROR_CODE_BAUD_RATE,  /**< Invalid baud rate*/
-    USART_ERROR_CODE_MAX         /**< Maximum error*/
-}UsartCodeError_t;
-
 /*****************************************************************************
  * Function Prototypes
  *****************************************************************************/

@@ -18,12 +18,14 @@
 *****************************************************************************/
 #include <stdint.h>
 #include <stdio.h>
+#include <assert.h>
 #include "usart_cfg.h"  /*For usart configuration*/
 #include "stm32f4xx.h"  /*Microcontroller family header*/
 
 /*****************************************************************************
 * Preprocessor Constants
 *****************************************************************************/
+#define USART_ERROR_CODE_NONE   0x0000U /**< No error code*/
 
 /*****************************************************************************
 * Configuration Constants
@@ -40,7 +42,6 @@
 /*****************************************************************************
 * Variables
 *****************************************************************************/
-uint8_t errorCodeFlag = USART_ERROR_CODE_NONE; /**< Error code flag*/
 
 /*****************************************************************************
  * Function Prototypes
@@ -50,11 +51,10 @@ extern "C"{
 #endif
 
 void USART_init(const UsartConfig_t * const Config, const uint32_t peripheralClock);
-void USART_transmit(const UsartPort_t Port, const uint8_t * const data);
-void USART_receive(const UsartPort_t Port, uint8_t * const data);
+void USART_transmit(const UsartPort_t Port, const char * const data);
+void USART_receive(const UsartPort_t Port, char * const data);
 void USART_registerWrite(const uint32_t address, const uint32_t value);
 uint32_t USART_registerRead(const uint32_t address);
-static uint16_t USART_baudRateCalculate(const uint32_t peripheralClock, const uint32_t BaudRate);
 
 #ifdef __cplusplus
 } // extern C
