@@ -148,3 +148,35 @@ typedef enum
     DMA_FIFO_THRESHOLD_FULL,  /**< Defines the FIFO threshold full */
     DMA_FIFO_THRESHOLD_MAX    /**< Defines the maximum FIFO threshold */
 }DmaFifoThreshold_t;
+
+/**
+ * Defines the Direct Memory Access configuration table. This table is used to
+ * configure the DMA peripheral in the DMA_Init function. 
+*/
+typedef struct
+{
+    DmaStream_t             Stream;               /**< DMA stream */
+    DmaChannel_t            Channel;              /**< DMA channel */
+    DmaDirection_t          Direction;            /**< DMA transfer direction */
+    DmaMemorySize_t         MemorySize;           /**< DMA memory data size */
+    DmaPeripheralSize_t     PeripheralSize;       /**< DMA peripheral data size */
+    DmaMemoryIncrement_t    MemoryIncrement;      /**< DMA memory increment mode */
+    DmaPeripheralIncrement_t PeripheralIncrement; /**< DMA peripheral increment mode */
+    DmaFifoMode_t           FifoMode;             /**< DMA FIFO direct mode */
+    DmaFifoThreshold_t      FifoThreshold;        /**< DMA FIFO threshold level */
+}DmaConfig_t;
+
+/*****************************************************************************
+ * Function Prototypes
+*****************************************************************************/
+#ifdef __cplusplus
+extern "C"{
+#endif
+
+const DmaConfig_t * const DMA_configGet(void);
+
+#ifdef __cplusplus
+} // extern C
+#endif
+
+#endif /*DMA_CFG_H_*/
