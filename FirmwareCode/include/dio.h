@@ -19,12 +19,14 @@
 *****************************************************************************/
 #include <stdint.h>
 #include <stdio.h>
+#include <assert.h>
 #include "dio_cfg.h"    /*For dio configuration*/
 #include "stm32f4xx.h"  /*Microcontroller family header*/  
 
 /*****************************************************************************
 * Preprocessor Constants
 *****************************************************************************/
+#define DIO_ERROR_CODE_NONE 0x0000U /**< No error code*/
 
 /*****************************************************************************
 * Configuration Constants
