@@ -25,6 +25,17 @@
 /*****************************************************************************
 * Module Typedefs
 *****************************************************************************/
+typedef enum
+{
+    DIO_ERROR_CODE_PORT=1,      /**< Invalid port*/
+    DIO_ERROR_CODE_PIN,         /**< Invalid pin*/
+    DIO_ERROR_CODE_MODE,        /**< Invalid mode*/
+    DIO_ERROR_CODE_TYPE,        /**< Invalid type*/
+    DIO_ERROR_CODE_SPEED,       /**< Invalid speed*/
+    DIO_ERROR_CODE_RESISTOR,    /**< Invalid resistor*/
+    DIO_ERROR_CODE_FUNCTION,    /**< Invalid function*/
+    DIO_ERROR_CODE_MAX          /**< Maximum error*/
+}DioCodeError_t;
 
 /*****************************************************************************
 * Module Variable Definitions
@@ -87,6 +98,9 @@ static uint32_t volatile * const afrRegister[NUMBER_OF_PORTS] =
     (uint32_t*)&GPIOH->AFR[0]
 };
 
+/*Define the error code flag*/
+static volatile uint8_t errorCodeFlag = DIO_ERROR_CODE_NONE; /**< Error code flag*/
+
 /*****************************************************************************
 * Function Prototypes
 *****************************************************************************/
@@ -132,6 +146,13 @@ void DIO_init(const DioConfig_t * const Config)
     /* Loop through all the elements of the configuration table. */
     for(uint8_t i=0; i<NUMBER_DIGITAL_PINS; i++)
     {
+        /*Check the USART port*/
+        if(Config[i].Port >= DIO_MAX_PORT)
+        {
+            errorCodeFlag = DIO_ERROR_CODE_PORT;
+            assert(errorCodeFlag != DIO_ERROR_CODE_PORT);
+        }
+
         /* 
          * Set the mode of the Dio pin on the GPIO port mode register. 
          * Multiply the pin number (Config[i].Pin) by two as MODER uses two 
@@ -160,7 +181,8 @@ void DIO_init(const DioConfig_t * const Config)
         }
         else
         {
-            printf("This Mode does not exist\n");
+            errorCodeFlag = DIO_ERROR_CODE_PIN;
+            assert(errorCodeFlag != DIO_ERROR_CODE_PIN);
         }
 
         /*
@@ -177,7 +199,8 @@ void DIO_init(const DioConfig_t * const Config)
         }
         else
         {
-            printf("This output type does not exist\n");
+            errorCodeFlag = DIO_ERROR_CODE_TYPE;
+            assert(errorCodeFlag != DIO_ERROR_CODE_TYPE);
         }
 
         /*
@@ -207,7 +230,8 @@ void DIO_init(const DioConfig_t * const Config)
         }
         else
         {
-            printf("The output speed does not exist\n");
+            errorCodeFlag = DIO_ERROR_CODE_SPEED;
+            assert(errorCodeFlag != DIO_ERROR_CODE_SPEED);
         }
 
         /*
@@ -233,7 +257,8 @@ void DIO_init(const DioConfig_t * const Config)
        }
        else
        {
-            printf("The port register does not exist");
+            errorCodeFlag = DIO_ERROR_CODE_RESISTOR;
+            assert(errorCodeFlag != DIO_ERROR_CODE_RESISTOR);
        }
 
         /*
@@ -352,6 +377,11 @@ void DIO_init(const DioConfig_t * const Config)
             *afrRegister[Config[i].Port] |= (2UL<<(Config[i].Pin*4));
             *afrRegister[Config[i].Port] |= (4UL<<(Config[i].Pin*4));
             *afrRegister[Config[i].Port] |= (8UL<<(Config[i].Pin*4));
+       }
+       else
+       {
+            errorCodeFlag = DIO_ERROR_CODE_FUNCTION;
+            assert(errorCodeFlag != DIO_ERROR_CODE_FUNCTION);
        } 
 
     }
