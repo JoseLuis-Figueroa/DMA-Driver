@@ -227,6 +227,7 @@ void USART_init(const UsartConfig_t * const Config, const uint32_t peripheralClo
             assert(errorCodeFlag != USART_ERROR_CODE_TX);
         }
 
+        /* Set the configuration of the USART on the control register 3*/
         /* Set the RX DMA mode */
         if(Config[i].RxDma == USART_RX_DMA_ENABLED)
         {
@@ -272,6 +273,7 @@ void USART_init(const UsartConfig_t * const Config, const uint32_t peripheralClo
             assert(errorCodeFlag != USART_ERROR_CODE_ENABLE);
         }
 
+        /* Set the configuration of the USART on the Baud Rate Register*/
         /* Set the baud rate */
         if(Config[i].BaudRate == USART_BAUD_RATE_9600)
         {

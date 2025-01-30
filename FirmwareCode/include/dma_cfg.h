@@ -55,7 +55,7 @@ typedef enum
     DMA2_STREAM_5,      /**< DMA Stream 13 */
     DMA2_STREAM_6,      /**< DMA Stream 14 */
     DMA2_STREAM_7,      /**< DMA Stream 15 */
-    DMA2_STREAM_MAX      /**< Defines the maximum DMA stream */
+    DMA_STREAM_MAX      /**< Defines the maximum DMA stream */
 }DmaStream_t;
 
 /*

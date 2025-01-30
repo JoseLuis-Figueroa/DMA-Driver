@@ -50,7 +50,8 @@ extern "C"{
 #endif
 
 void DMA_init(const DmaConfig_t * const Config);
-void DMA_transferConfig(const DmaStream_t Stream, const uint32_t * data, const uint32_t length);
+void DMA_transferConfig(const DmaStream_t Stream, volatile uint32_t * const peripheral,
+const uint32_t * memory, const uint32_t length);
 
 #ifdef __cplusplus
 } // extern C
