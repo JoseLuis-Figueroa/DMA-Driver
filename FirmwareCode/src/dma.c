@@ -109,7 +109,7 @@ static uint32_t volatile * const streamNumberOfData[DMA_PORTS_NUMBER] =
 };
 
 /* Defines the error code flag */
-static volatile uint16_t errorCodeFlag = DMA_ERROR_CODE_NONE; /**< Error code flag*/
+volatile uint16_t DMA_errorCodeFlag = DMA_ERROR_CODE_NONE; /**< Error code flag*/
 
 /*****************************************************************************
 * Function Prototypes
@@ -156,8 +156,8 @@ void DMA_init(const DmaConfig_t * const Config)
         /*Review if the DMA stream is correct*/
         if(Config[i].Stream >= DMA_STREAM_MAX)
         {
-            errorCodeFlag = DMA_ERROR_CODE_STREAM;
-            assert(errorCodeFlag != DMA_ERROR_CODE_STREAM);
+            DMA_errorCodeFlag = DMA_ERROR_CODE_STREAM;
+            assert(DMA_errorCodeFlag != DMA_ERROR_CODE_STREAM);
         }
 
         /* Set the configuration of the DMA on the control register */
@@ -212,8 +212,8 @@ void DMA_init(const DmaConfig_t * const Config)
         }
         else
         {
-            errorCodeFlag = DMA_ERROR_CODE_CHANNEL;
-            assert(errorCodeFlag != DMA_ERROR_CODE_CHANNEL);
+            DMA_errorCodeFlag = DMA_ERROR_CODE_CHANNEL;
+            assert(DMA_errorCodeFlag != DMA_ERROR_CODE_CHANNEL);
         }
         
         /* Set the direction of the stream*/
@@ -234,8 +234,8 @@ void DMA_init(const DmaConfig_t * const Config)
         }
         else
         {
-            errorCodeFlag = DMA_ERROR_CODE_DIRECTION;
-            assert(errorCodeFlag != DMA_ERROR_CODE_DIRECTION);
+            DMA_errorCodeFlag = DMA_ERROR_CODE_DIRECTION;
+            assert(DMA_errorCodeFlag != DMA_ERROR_CODE_DIRECTION);
         }
 
         /* Set the memory data size */
@@ -256,8 +256,8 @@ void DMA_init(const DmaConfig_t * const Config)
         }
         else
         {
-            errorCodeFlag = DMA_ERROR_CODE_MEMORY_SIZE;
-            assert(errorCodeFlag != DMA_ERROR_CODE_MEMORY_SIZE);
+            DMA_errorCodeFlag = DMA_ERROR_CODE_MEMORY_SIZE;
+            assert(DMA_errorCodeFlag != DMA_ERROR_CODE_MEMORY_SIZE);
         }
 
         /* Set the peripheral data size */
@@ -278,8 +278,8 @@ void DMA_init(const DmaConfig_t * const Config)
         }
         else
         {
-            errorCodeFlag = DMA_ERROR_CODE_PERIPHERAL_SIZE;
-            assert(errorCodeFlag != DMA_ERROR_CODE_PERIPHERAL_SIZE);
+            DMA_errorCodeFlag = DMA_ERROR_CODE_PERIPHERAL_SIZE;
+            assert(DMA_errorCodeFlag != DMA_ERROR_CODE_PERIPHERAL_SIZE);
         }
 
         /* Set the memory increment mode*/
@@ -293,8 +293,8 @@ void DMA_init(const DmaConfig_t * const Config)
         }
         else
         {
-            errorCodeFlag = DMA_ERROR_CODE_MEMORY_INCREMENT;
-            assert(errorCodeFlag != DMA_ERROR_CODE_MEMORY_INCREMENT);
+            DMA_errorCodeFlag = DMA_ERROR_CODE_MEMORY_INCREMENT;
+            assert(DMA_errorCodeFlag != DMA_ERROR_CODE_MEMORY_INCREMENT);
         }
 
         /* Set the peripheral increment mode*/
@@ -308,8 +308,8 @@ void DMA_init(const DmaConfig_t * const Config)
         }
         else
         {
-            errorCodeFlag = DMA_ERROR_CODE_PERIPHERAL_INCREMENT;
-            assert(errorCodeFlag != DMA_ERROR_CODE_PERIPHERAL_INCREMENT);
+            DMA_errorCodeFlag = DMA_ERROR_CODE_PERIPHERAL_INCREMENT;
+            assert(DMA_errorCodeFlag != DMA_ERROR_CODE_PERIPHERAL_INCREMENT);
         }
 
         /* Set the configuration of the DMA on the FIFO control register */
@@ -324,8 +324,8 @@ void DMA_init(const DmaConfig_t * const Config)
         }
         else
         {
-            errorCodeFlag = DMA_ERROR_CODE_FIFO_MODE;
-            assert(errorCodeFlag != DMA_ERROR_CODE_FIFO_MODE);
+            DMA_errorCodeFlag = DMA_ERROR_CODE_FIFO_MODE;
+            assert(DMA_errorCodeFlag != DMA_ERROR_CODE_FIFO_MODE);
         }
 
         /* Set the FIFO threshold level*/
@@ -351,8 +351,8 @@ void DMA_init(const DmaConfig_t * const Config)
         }
         else
         {
-            errorCodeFlag = DMA_ERROR_CODE_FIFO_THRESHOLD;
-            assert(errorCodeFlag != DMA_ERROR_CODE_FIFO_THRESHOLD);
+            DMA_errorCodeFlag = DMA_ERROR_CODE_FIFO_THRESHOLD;
+            assert(DMA_errorCodeFlag != DMA_ERROR_CODE_FIFO_THRESHOLD);
         }
 
     }
@@ -396,7 +396,7 @@ const uint32_t * memory, const uint32_t length)
     *streamMemory0Address[Stream] = (uint32_t)memory;
 
     /* Set the peripheral address */
-    *streamPeripheralAddress[Stream] = (uint32_t)&peripheral;
+    *streamPeripheralAddress[Stream] = (uint32_t)peripheral;
 
     /* Set the number of data */
     *streamNumberOfData[Stream] = length;
