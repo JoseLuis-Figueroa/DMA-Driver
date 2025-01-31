@@ -7,7 +7,7 @@
  * 
  * @copyright Copyright (c) 2023 Jose Luis Figueroa. MIT License.
  * 
- */
+*/
 /*****************************************************************************
 * Includes
 *****************************************************************************/
@@ -324,7 +324,7 @@ void USART_init(const UsartConfig_t * const Config, const uint32_t peripheralClo
     * 
     * \b Example:
     * @code
-    * USART_transmit(USART2, "H");
+    * USART_transmit(USART2, data);
     * @endcode
     * 
     * @see USART_ConfigGet
@@ -368,7 +368,7 @@ void USART_transmit(const UsartPort_t Port, const char * const data)
     * 
     * \b Example:
     * @code
-    * USART_receive(USART2);
+    * USART_receive(USART2, &data);
     * @endcode
     * 
     * @see USART_ConfigGet

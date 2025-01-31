@@ -3,6 +3,7 @@
         "auxiliar",
         "CHSEL",
         "DMAR",
+        "DMASTATUS",
         "DMAT",
         "DMDIS",
         "MINC",

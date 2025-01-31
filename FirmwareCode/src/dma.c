@@ -388,7 +388,7 @@ void DMA_init(const DmaConfig_t * const Config)
  * @see DMA_Init
  * @see DMA_transferConfig
  * 
- */
+*/
 void DMA_transferConfig(const DmaStream_t Stream, volatile uint32_t * const peripheral,
 const uint32_t * memory, const uint32_t length)
 {

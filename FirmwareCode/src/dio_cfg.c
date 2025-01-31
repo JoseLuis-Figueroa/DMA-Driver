@@ -8,7 +8,7 @@
  * 
  * @copyright Copyright (c) 2023 Jose Luis Figueroa. MIT License.
  * 
- */
+*/
 
 /*****************************************************************************
 * Module Includes
@@ -45,7 +45,6 @@ const DioConfig_t DioConfig[] =
 */ 
    {DIO_PA, DIO_PA2, DIO_FUNCTION, DIO_PUSH_PULL, DIO_LOW_SPEED, DIO_PULLUP, DIO_AF7},
    {DIO_PA, DIO_PA3, DIO_FUNCTION, DIO_PUSH_PULL, DIO_LOW_SPEED, DIO_PULLUP, DIO_AF7},
-   {DIO_PA, DIO_PA5, DIO_OUTPUT, DIO_PUSH_PULL, DIO_LOW_SPEED, DIO_NO_RESISTOR, DIO_AF0},
 };
 
 /*****************************************************************************
