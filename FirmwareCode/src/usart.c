@@ -7,7 +7,7 @@
  * 
  * @copyright Copyright (c) 2023 Jose Luis Figueroa. MIT License.
  * 
- */
+*/
 /*****************************************************************************
 * Includes
 *****************************************************************************/
@@ -82,7 +82,7 @@ static uint32_t volatile * const dataRegister[USART_PORTS_NUMBER] =
 };
 
 /* Defines the error code flag */
-static volatile uint16_t errorCodeFlag = USART_ERROR_CODE_NONE; /**< Error code flag*/
+volatile uint16_t USART_errorCodeFlag = USART_ERROR_CODE_NONE; /**< Error code flag*/
 
 /*****************************************************************************
 * Function Prototypes
@@ -135,8 +135,8 @@ void USART_init(const UsartConfig_t * const Config, const uint32_t peripheralClo
         /*Review if the USART port is correct*/
         if(Config[i].Port >= USART_PORT_MAX)
         {
-            errorCodeFlag = USART_ERROR_CODE_PORT;
-            assert(errorCodeFlag != USART_ERROR_CODE_PORT);
+            USART_errorCodeFlag = USART_ERROR_CODE_PORT;
+            assert(USART_errorCodeFlag != USART_ERROR_CODE_PORT);
         }
 
         /* Set the configuration of the USART on the control register 1*/
@@ -151,8 +151,8 @@ void USART_init(const UsartConfig_t * const Config, const uint32_t peripheralClo
         }
         else if(Config[i].WordLength >= USART_WORD_LENGTH_MAX)
         {
-            errorCodeFlag = USART_ERROR_CODE_WORD_LENGTH;
-            assert(errorCodeFlag != USART_ERROR_CODE_WORD_LENGTH);
+            USART_errorCodeFlag = USART_ERROR_CODE_WORD_LENGTH;
+            assert(USART_errorCodeFlag != USART_ERROR_CODE_WORD_LENGTH);
         }
 
         /* Set the number of stop bits */
@@ -178,8 +178,8 @@ void USART_init(const UsartConfig_t * const Config, const uint32_t peripheralClo
         }
         else if(Config[i].StopBits >= USART_STOP_BITS_MAX)
         {
-            errorCodeFlag = USART_ERROR_CODE_STOP_BITS;
-            assert(errorCodeFlag != USART_ERROR_CODE_STOP_BITS);
+            USART_errorCodeFlag = USART_ERROR_CODE_STOP_BITS;
+            assert(USART_errorCodeFlag != USART_ERROR_CODE_STOP_BITS);
         }
 
         /* Set the parity */
@@ -193,8 +193,8 @@ void USART_init(const UsartConfig_t * const Config, const uint32_t peripheralClo
         }
         else if(Config[i].Parity >= USART_PARITY_MAX)
         {
-            errorCodeFlag = USART_ERROR_CODE_PARITY;
-            assert(errorCodeFlag != USART_ERROR_CODE_PARITY);
+            USART_errorCodeFlag = USART_ERROR_CODE_PARITY;
+            assert(USART_errorCodeFlag != USART_ERROR_CODE_PARITY);
         }
 
         /* Set the RX mode */
@@ -208,8 +208,8 @@ void USART_init(const UsartConfig_t * const Config, const uint32_t peripheralClo
         }
         else if(Config[i].Rx >= USART_RX_MAX)
         {
-            errorCodeFlag = USART_ERROR_CODE_RX;
-            assert(errorCodeFlag != USART_ERROR_CODE_RX);
+            USART_errorCodeFlag = USART_ERROR_CODE_RX;
+            assert(USART_errorCodeFlag != USART_ERROR_CODE_RX);
         }
 
         /* Set the TX mode */
@@ -223,10 +223,11 @@ void USART_init(const UsartConfig_t * const Config, const uint32_t peripheralClo
         }
         else if(Config[i].Tx >= USART_TX_MAX)
         {
-            errorCodeFlag = USART_ERROR_CODE_TX;
-            assert(errorCodeFlag != USART_ERROR_CODE_TX);
+            USART_errorCodeFlag = USART_ERROR_CODE_TX;
+            assert(USART_errorCodeFlag != USART_ERROR_CODE_TX);
         }
 
+        /* Set the configuration of the USART on the control register 3*/
         /* Set the RX DMA mode */
         if(Config[i].RxDma == USART_RX_DMA_ENABLED)
         {
@@ -238,8 +239,8 @@ void USART_init(const UsartConfig_t * const Config, const uint32_t peripheralClo
         }
         else if(Config[i].RxDma >= USART_RX_DMA_MAX)
         {
-            errorCodeFlag = USART_ERROR_CODE_RX_DMA;
-            assert(errorCodeFlag != USART_ERROR_CODE_RX_DMA);
+            USART_errorCodeFlag = USART_ERROR_CODE_RX_DMA;
+            assert(USART_errorCodeFlag != USART_ERROR_CODE_RX_DMA);
         }
 
         /* Set the TX DMA mode */
@@ -253,8 +254,8 @@ void USART_init(const UsartConfig_t * const Config, const uint32_t peripheralClo
         }
         else if(Config[i].TxDma >= USART_TX_DMA_MAX)
         {
-            errorCodeFlag = USART_ERROR_CODE_TX_DMA;
-            assert(errorCodeFlag != USART_ERROR_CODE_TX_DMA);
+            USART_errorCodeFlag = USART_ERROR_CODE_TX_DMA;
+            assert(USART_errorCodeFlag != USART_ERROR_CODE_TX_DMA);
         }
 
         /* Set the enable */
@@ -268,10 +269,11 @@ void USART_init(const UsartConfig_t * const Config, const uint32_t peripheralClo
         }
         else if(Config[i].Enable >= USART_UE_MAX)
         {
-            errorCodeFlag = USART_ERROR_CODE_ENABLE;
-            assert(errorCodeFlag != USART_ERROR_CODE_ENABLE);
+            USART_errorCodeFlag = USART_ERROR_CODE_ENABLE;
+            assert(USART_errorCodeFlag != USART_ERROR_CODE_ENABLE);
         }
 
+        /* Set the configuration of the USART on the Baud Rate Register*/
         /* Set the baud rate */
         if(Config[i].BaudRate == USART_BAUD_RATE_9600)
         {
@@ -295,8 +297,8 @@ void USART_init(const UsartConfig_t * const Config, const uint32_t peripheralClo
         }
         else if(Config[i].BaudRate >= USART_BAUD_RATE_MAX)
         {
-            errorCodeFlag = USART_ERROR_CODE_BAUD_RATE;
-            assert(errorCodeFlag != USART_ERROR_CODE_BAUD_RATE);
+            USART_errorCodeFlag = USART_ERROR_CODE_BAUD_RATE;
+            assert(USART_errorCodeFlag != USART_ERROR_CODE_BAUD_RATE);
         }
     
     }
@@ -322,7 +324,7 @@ void USART_init(const UsartConfig_t * const Config, const uint32_t peripheralClo
     * 
     * \b Example:
     * @code
-    * USART_transmit(USART2, "H");
+    * USART_transmit(USART2, data);
     * @endcode
     * 
     * @see USART_ConfigGet
@@ -366,7 +368,7 @@ void USART_transmit(const UsartPort_t Port, const char * const data)
     * 
     * \b Example:
     * @code
-    * USART_receive(USART2);
+    * USART_receive(USART2, &data);
     * @endcode
     * 
     * @see USART_ConfigGet

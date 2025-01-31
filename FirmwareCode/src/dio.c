@@ -99,7 +99,7 @@ static uint32_t volatile * const afrRegister[NUMBER_OF_PORTS] =
 };
 
 /*Define the error code flag*/
-static volatile uint8_t errorCodeFlag = DIO_ERROR_CODE_NONE; /**< Error code flag*/
+volatile uint8_t DIO_errorCodeFlag = DIO_ERROR_CODE_NONE; /**< Error code flag*/
 
 /*****************************************************************************
 * Function Prototypes
@@ -149,8 +149,8 @@ void DIO_init(const DioConfig_t * const Config)
         /*Check the USART port*/
         if(Config[i].Port >= DIO_MAX_PORT)
         {
-            errorCodeFlag = DIO_ERROR_CODE_PORT;
-            assert(errorCodeFlag != DIO_ERROR_CODE_PORT);
+            DIO_errorCodeFlag = DIO_ERROR_CODE_PORT;
+            assert(DIO_errorCodeFlag != DIO_ERROR_CODE_PORT);
         }
 
         /* 
@@ -181,8 +181,8 @@ void DIO_init(const DioConfig_t * const Config)
         }
         else
         {
-            errorCodeFlag = DIO_ERROR_CODE_PIN;
-            assert(errorCodeFlag != DIO_ERROR_CODE_PIN);
+            DIO_errorCodeFlag = DIO_ERROR_CODE_PIN;
+            assert(DIO_errorCodeFlag != DIO_ERROR_CODE_PIN);
         }
 
         /*
@@ -199,8 +199,8 @@ void DIO_init(const DioConfig_t * const Config)
         }
         else
         {
-            errorCodeFlag = DIO_ERROR_CODE_TYPE;
-            assert(errorCodeFlag != DIO_ERROR_CODE_TYPE);
+            DIO_errorCodeFlag = DIO_ERROR_CODE_TYPE;
+            assert(DIO_errorCodeFlag != DIO_ERROR_CODE_TYPE);
         }
 
         /*
@@ -230,8 +230,8 @@ void DIO_init(const DioConfig_t * const Config)
         }
         else
         {
-            errorCodeFlag = DIO_ERROR_CODE_SPEED;
-            assert(errorCodeFlag != DIO_ERROR_CODE_SPEED);
+            DIO_errorCodeFlag = DIO_ERROR_CODE_SPEED;
+            assert(DIO_errorCodeFlag != DIO_ERROR_CODE_SPEED);
         }
 
         /*
@@ -257,8 +257,8 @@ void DIO_init(const DioConfig_t * const Config)
        }
        else
        {
-            errorCodeFlag = DIO_ERROR_CODE_RESISTOR;
-            assert(errorCodeFlag != DIO_ERROR_CODE_RESISTOR);
+            DIO_errorCodeFlag = DIO_ERROR_CODE_RESISTOR;
+            assert(DIO_errorCodeFlag != DIO_ERROR_CODE_RESISTOR);
        }
 
         /*
@@ -380,8 +380,8 @@ void DIO_init(const DioConfig_t * const Config)
        }
        else
        {
-            errorCodeFlag = DIO_ERROR_CODE_FUNCTION;
-            assert(errorCodeFlag != DIO_ERROR_CODE_FUNCTION);
+            DIO_errorCodeFlag = DIO_ERROR_CODE_FUNCTION;
+            assert(DIO_errorCodeFlag != DIO_ERROR_CODE_FUNCTION);
        } 
 
     }

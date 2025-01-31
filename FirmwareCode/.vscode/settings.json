@@ -1,8 +1,14 @@
 {
     "cSpell.words": [
         "auxiliar",
+        "CHSEL",
         "DMAR",
+        "DMASTATUS",
         "DMAT",
+        "DMDIS",
+        "MINC",
+        "NDTR",
+        "PINC",
         "USART"
     ]
 }
