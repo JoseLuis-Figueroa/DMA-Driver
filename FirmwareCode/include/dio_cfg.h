@@ -28,7 +28,7 @@
 /** Set the value according with the number of digital input/output peripheral
  * channel (pins) used.
 */
-#define NUMBER_DIGITAL_PINS 2
+#define NUMBER_DIGITAL_PINS 3U
 
 /*****************************************************************************
 * Typedefs

@@ -43,12 +43,12 @@ const DmaConfig_t DmaConfig[] =
  *  FifoMode                      FifoThreshold
  *                
 */ 
-   {DMA1_STREAM_6, DMA_CHANNEL_4, DMA_PERIPHERAL_TO_MEMORY, DMA_MEMORY_SIZE_8,
+   {DMA1_STREAM_6, DMA_CHANNEL_4, DMA_MEMORY_TO_PERIPHERAL, DMA_MEMORY_SIZE_8,
    DMA_PERIPHERAL_SIZE_8, DMA_MEMORY_INCREMENT_ENABLED, DMA_PERIPHERAL_INCREMENT_DISABLED,
-   DMA_FIFO_DIRECT_MODE_DISABLED, DMA_FIFO_THRESHOLD_FULL},
+   DMA_FIFO_DIRECT_MODE_ENABLED, DMA_FIFO_THRESHOLD_FULL},
    {DMA1_STREAM_5, DMA_CHANNEL_4, DMA_PERIPHERAL_TO_MEMORY, DMA_MEMORY_SIZE_8,
    DMA_PERIPHERAL_SIZE_8, DMA_MEMORY_INCREMENT_ENABLED, DMA_PERIPHERAL_INCREMENT_DISABLED,
-   DMA_FIFO_DIRECT_MODE_DISABLED, DMA_FIFO_THRESHOLD_FULL},
+   DMA_FIFO_DIRECT_MODE_ENABLED, DMA_FIFO_THRESHOLD_FULL},
 };
 /*****************************************************************************
  * Function Prototypes
@@ -83,7 +83,7 @@ const DmaConfig_t DmaConfig[] =
  * @see DMA_transferConfig
  * 
  */
-const DmaConfig_t * const Dma_configGet(void)
+const DmaConfig_t * const DMA_configGet(void)
 {
     /* The cast is performed to ensure that the address of the first element 
      * of configuration table is returned as a constant pointer and not a
