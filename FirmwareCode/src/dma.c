@@ -2,10 +2,10 @@
  * @file dma.c
  * @author Jose Luis Figueroa 
  * @brief The implementation for the Direct Memory Access driver.
- * @version 1.0
- * @date 2025-01-29
+ * @version 1.1
+ * @date 2025-03-24
  * 
- * @copyright Copyright (c) 2023 Jose Luis Figueroa. MIT License.
+ * @copyright Copyright (c) 2025 Jose Luis Figueroa. MIT License.
  * 
  */
 /*****************************************************************************
@@ -24,22 +24,6 @@
 /*****************************************************************************
 * Module Typedefs
 *****************************************************************************/
-/**
- * Defines the error code list for the DMA configuration module.
- */
-typedef enum
-{
-    DMA_ERROR_CODE_STREAM=1,        /**< Invalid stream*/
-    DMA_ERROR_CODE_CHANNEL,         /**< Invalid channel*/
-    DMA_ERROR_CODE_DIRECTION,       /**< Invalid direction*/
-    DMA_ERROR_CODE_MEMORY_SIZE,     /**< Invalid memory size*/
-    DMA_ERROR_CODE_PERIPHERAL_SIZE, /**< Invalid peripheral size*/
-    DMA_ERROR_CODE_MEMORY_INCREMENT,/**< Invalid memory increment*/
-    DMA_ERROR_CODE_PERIPHERAL_INCREMENT, /**< Invalid peripheral increment*/
-    DMA_ERROR_CODE_FIFO_MODE,       /**< Invalid FIFO mode*/
-    DMA_ERROR_CODE_FIFO_THRESHOLD,  /**< Invalid FIFO threshold*/
-    DMA_ERROR_CODE_MAX              /**< Maximum error*/
-}DmaCodeError_t;
 
 /*****************************************************************************
  * Module Variable Definitions
@@ -108,9 +92,6 @@ static uint32_t volatile * const streamNumberOfData[DMA_PORTS_NUMBER] =
     (uint32_t*)&DMA2_Stream6->NDTR, (uint32_t*)&DMA2_Stream7->NDTR
 };
 
-/* Defines the error code flag */
-volatile uint16_t DMA_errorCodeFlag = DMA_ERROR_CODE_NONE; /**< Error code flag*/
-
 /*****************************************************************************
 * Function Prototypes
 *****************************************************************************/
@@ -125,40 +106,41 @@ volatile uint16_t DMA_errorCodeFlag = DMA_ERROR_CODE_NONE; /**< Error code flag*
  * This function is used to initialize the DMA peripheral based on the
  * configuration table defined in dma_cfg module.
  * 
- * PRE-CONDITION: The MCU clocks must be configured and enabled.
- * PRE-CONDITION: The DMA_PORTS_NUMBER > 0 
- * PRE-CONDITION: The configuration table must be populated with valid values.
+ * PRE-CONDITION: The MCU clocks must be configured and enabled. <br>
+ * PRE-CONDITION: Configuration table needs to be populated (sizeof>0) <br>
+ * PRE-CONDITION: The DMA_PORTS_NUMBER > 0 <br>
+ * PRE-CONDITION: The setting is within the maximum values (DMA_MAX). <br>
  * 
  * POST-CONDITION: The DMA peripheral is set up with the configuration
- * table.
+ * table. <br>
  * 
  * @param[in]   Config is a pointer to the configuration table that contains
  * the initialization for the peripheral.
+ * @param[in]   configSize is the size of the configuration table.
  * 
  * @return void
  * 
  * \b Example:
  * @code
  * const DmaConfig_t * const DmaConfig = Dma_configGet();
- * DMA_Init(DmaConfig);
+ * size_t configSize = DMA_configSizeGet();
+ * 
+ * DMA_init(DmaConfig, configSize);
  * @endcode
  * 
  * @see DMA_configGet
+ * @see DMA_getConfigSize
  * @see DMA_Init
  * @see DMA_transferConfig
  * 
- */
+*****************************************************************************/
 void DMA_init(const DmaConfig_t * const Config)
 {
     /* Loop through all the elements of the configuration table. */
     for(uint8_t i=0; i<DMA_USED_PORTS; i++)
     {
-        /*Review if the DMA stream is correct*/
-        if(Config[i].Stream >= DMA_STREAM_MAX)
-        {
-            DMA_errorCodeFlag = DMA_ERROR_CODE_STREAM;
-            assert(DMA_errorCodeFlag != DMA_ERROR_CODE_STREAM);
-        }
+        /*Review if the DMA port is correct*/
+        assert(Config[i].Stream < DMA_PORTS_NUMBER);
 
         /* Set the configuration of the DMA on the control register */
         /* Set the channel of the stream*/
@@ -212,8 +194,7 @@ void DMA_init(const DmaConfig_t * const Config)
         }
         else
         {
-            DMA_errorCodeFlag = DMA_ERROR_CODE_CHANNEL;
-            assert(DMA_errorCodeFlag != DMA_ERROR_CODE_CHANNEL);
+            assert(Config[i].Channel < DMA_CHANNEL_MAX);
         }
         
         /* Set the direction of the stream*/
@@ -234,8 +215,7 @@ void DMA_init(const DmaConfig_t * const Config)
         }
         else
         {
-            DMA_errorCodeFlag = DMA_ERROR_CODE_DIRECTION;
-            assert(DMA_errorCodeFlag != DMA_ERROR_CODE_DIRECTION);
+            assert(Config[i].Direction < DMA_DIRECTION_MAX);
         }
 
         /* Set the memory data size */
@@ -256,8 +236,7 @@ void DMA_init(const DmaConfig_t * const Config)
         }
         else
         {
-            DMA_errorCodeFlag = DMA_ERROR_CODE_MEMORY_SIZE;
-            assert(DMA_errorCodeFlag != DMA_ERROR_CODE_MEMORY_SIZE);
+            assert(Config[i].MemorySize < DMA_MEMORY_SIZE_MAX);
         }
 
         /* Set the peripheral data size */
@@ -278,8 +257,7 @@ void DMA_init(const DmaConfig_t * const Config)
         }
         else
         {
-            DMA_errorCodeFlag = DMA_ERROR_CODE_PERIPHERAL_SIZE;
-            assert(DMA_errorCodeFlag != DMA_ERROR_CODE_PERIPHERAL_SIZE);
+            assert(Config[i].PeripheralSize < DMA_PERIPHERAL_SIZE_MAX);
         }
 
         /* Set the memory increment mode*/
@@ -293,8 +271,7 @@ void DMA_init(const DmaConfig_t * const Config)
         }
         else
         {
-            DMA_errorCodeFlag = DMA_ERROR_CODE_MEMORY_INCREMENT;
-            assert(DMA_errorCodeFlag != DMA_ERROR_CODE_MEMORY_INCREMENT);
+            assert(Config[i].MemoryIncrement < DMA_MEMORY_INCREMENT_MAX);
         }
 
         /* Set the peripheral increment mode*/
@@ -308,8 +285,7 @@ void DMA_init(const DmaConfig_t * const Config)
         }
         else
         {
-            DMA_errorCodeFlag = DMA_ERROR_CODE_PERIPHERAL_INCREMENT;
-            assert(DMA_errorCodeFlag != DMA_ERROR_CODE_PERIPHERAL_INCREMENT);
+            assert(Config[i].PeripheralIncrement < DMA_PERIPHERAL_INCREMENT_MAX);
         }
 
         /* Set the configuration of the DMA on the FIFO control register */
@@ -324,8 +300,7 @@ void DMA_init(const DmaConfig_t * const Config)
         }
         else
         {
-            DMA_errorCodeFlag = DMA_ERROR_CODE_FIFO_MODE;
-            assert(DMA_errorCodeFlag != DMA_ERROR_CODE_FIFO_MODE);
+            assert(Config[i].FifoMode < DMA_FIFO_DIRECT_MODE_MAX);
         }
 
         /* Set the FIFO threshold level*/
@@ -351,8 +326,7 @@ void DMA_init(const DmaConfig_t * const Config)
         }
         else
         {
-            DMA_errorCodeFlag = DMA_ERROR_CODE_FIFO_THRESHOLD;
-            assert(DMA_errorCodeFlag != DMA_ERROR_CODE_FIFO_THRESHOLD);
+            assert(Config[i].FifoThreshold < DMA_FIFO_THRESHOLD_MAX);
         }
 
     }
@@ -363,44 +337,57 @@ void DMA_init(const DmaConfig_t * const Config)
  * Function: DMA_transferConfig()
  *//**
  * \b Description:
- * This function is used to configure the DMA peripheral for a transfer.
+ * This function is used to configure the DMA peripheral for a transfer. This 
+ * function is used to send data specified by the DmaTransferConfig_t
+ * structure which contains the Stream, peripheral, memory, and length.
  * 
- * PRE-CONDITION: The DMA peripheral must be initialized.
+ * PRE-CONDITION: The DMA peripheral must be initialized. <br>
+ * PRE-CONDITION: DmaTransferConfig_t  must be populated (sizeof > 0). <br>
  * PRE-CONDITION: The DMA_PORTS_NUMBER > 0 
+ * PRE-CONDITION: The Stream is within the maximum DMA_STREAM_MAX. <br>
  * 
- * POST-CONDITION: The DMA peripheral is set up for a transfer.
+ * POST-CONDITION: The DMA peripheral is set up for a transfer. <br>
  * 
- * @param[in]   Stream is the DMA stream to configure.
- * @param[in]   peripheral is the register of the peripheral.
- * @param[in]   memory is the space of the memory.
- * @param[in]   length is the number of data to transfer.
+ * @param[in]  TransferConfig is a pointer to the configuration table that
+ *             contains the data for the DMA data transfer.
  * 
  * @return void
  * 
  * \b Example:
  * @code
  * const DmaConfig_t * const DmaConfig = Dma_configGet();
- * DMA_Init(DmaConfig);
- * DMA_transferConfig(DmaConfig);
+ * size_t configSize = DMA_configSizeGet();
+ * 
+ * DMA_init(DmaConfig, configSize);
+ * 
+ * DmaTransferConfig_t DmaTransferConfig =
+ * {
+ *      .Stream = DMA1_STREAM_6,
+ *      .peripheral = (uint32_t*)&USART1->DR,
+ *      .memory = (uint32_t*)&txBuffer[0],
+ *      .length = sizeof(txBuffer)/sizeof(txBuffer[0])
+ * };
+ * 
+ * DMA_transferConfig(&DmaTransferConfig);
  * @endcode
  * 
  * @see DMA_configGet
+ * @see DMA_getConfigSize
  * @see DMA_Init
  * @see DMA_transferConfig
  * 
 */
-void DMA_transferConfig(const DmaStream_t Stream, volatile uint32_t * const peripheral,
-const uint32_t * memory, const uint32_t length)
+void DMA_transferConfig(const DmaTransferConfig_t * const TransferConfig)
 {
     /* Set the memory address */
-    *streamMemory0Address[Stream] = (uint32_t)memory;
+    *streamMemory0Address[TransferConfig->Stream] = (uint32_t)TransferConfig->memory;
 
     /* Set the peripheral address */
-    *streamPeripheralAddress[Stream] = (uint32_t)peripheral;
+    *streamPeripheralAddress[TransferConfig->Stream] = (uint32_t)TransferConfig->peripheral;
 
     /* Set the number of data */
-    *streamNumberOfData[Stream] = length;
+    *streamNumberOfData[TransferConfig->Stream] = TransferConfig->length;
 
     /* Enable the stream */
-    *streamControlRegister[Stream] |= DMA_SxCR_EN;
+    *streamControlRegister[TransferConfig->Stream] |= DMA_SxCR_EN;
 }

@@ -86,7 +86,7 @@ const uint32_t BaudRate);
     * PRE-CONDITION: The setting is within the maximum values (USART_MAX). <br>
     * 
     * POST-CONDITION: The USART peripheral is set up with the configuration
-    * table.
+    * table. <br>
     * 
     * @param[in]   Config is a pointer to the configuration table that contains
     * the initialization for the peripheral.
@@ -106,11 +106,11 @@ const uint32_t BaudRate);
     * USART_init(UsartConfig, APB1_CLOCK, configSize);
     * @endcode
     * 
-    * @see USART_ConfigGet
-    * @see USART_ConfigSizeGet
-    * @see USART_Init
-    * @see USART_Transmit
-    * @see USART_Receive
+    * @see USART_configGet
+    * @see USART_configSizeGet
+    * @see USART_init
+    * @see USART_transmit
+    * @see USART_receive
     * @see USART_registerWrite
     * @see USART_registerRead
     * 
@@ -312,13 +312,14 @@ const uint32_t peripheralClock, size_t configSize)
     * USART_transmit(&TransferConfig);
     * @endcode
     * 
-    * @see USART_ConfigGet
-    * @see USART_ConfigSizeGet
-    * @see USART_Init
-    * @see USART_Transmit
-    * @see USART_Receive
+    * @see USART_configGet
+    * @see USART_configSizeGet
+    * @see USART_init
+    * @see USART_transmit
+    * @see USART_receive
     * @see USART_registerWrite
     * @see USART_registerRead
+    * 
 *****************************************************************************/
 void USART_transmit(const UsartTransferConfig_t * const TransferConfig)
 {
@@ -371,11 +372,11 @@ void USART_transmit(const UsartTransferConfig_t * const TransferConfig)
     * USART_receive(&TransferConfig);
     * @endcode
     * 
-    * @see USART_ConfigGet
-    * @see USART_ConfigSizeGet
-    * @see USART_Init
-    * @see USART_Transmit
-    * @see USART_Receive
+    * @see USART_configGet
+    * @see USART_configSizeGet
+    * @see USART_init
+    * @see USART_transmit
+    * @see USART_receive
     * @see USART_registerWrite
     * @see USART_registerRead
     * 
@@ -417,11 +418,11 @@ void USART_receive(const UsartTransferConfig_t * const TransferConfig)
     * USART_registerWrite(0x1000003, 0x01);
     * @endcode
     * 
-    * @see USART_ConfigGet
-    * @see USART_ConfigSizeGet
-    * @see USART_Init
-    * @see USART_Transmit
-    * @see USART_Receive
+    * @see USART_configGet
+    * @see USART_configSizeGet
+    * @see USART_init
+    * @see USART_transmit
+    * @see USART_receive
     * @see USART_registerWrite
     * @see USART_registerRead
     *
@@ -457,11 +458,11 @@ void USART_registerWrite(const uint32_t address, const uint32_t value)
     * uint32_t value = USART_registerRead(0x10000003);
     * @endcode
     * 
-    * @see USART_ConfigGet
-    * @see USART_ConfigSizeGet
-    * @see USART_Init
-    * @see USART_Transmit
-    * @see USART_Receive
+    * @see USART_configGet
+    * @see USART_configSizeGet
+    * @see USART_init
+    * @see USART_transmit
+    * @see USART_receive
     * @see USART_registerWrite
     * @see USART_registerRead
     * 
