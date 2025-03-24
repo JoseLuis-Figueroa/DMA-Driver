@@ -8,5 +8,9 @@
 			"path": "FirmwareCode"
 		}
 	],
-	"settings": {}
+	"settings": {
+		"files.associations": {
+			"stdint.h": "c"
+		}
+	}
 }

@@ -3,10 +3,10 @@
  * @author Jose Luis Figueroa
  * @brief This module contains the implementation for the Universal 
  * Synchronous/Asynchronous Receiver Transmitter peripheral configuration.
- * @version 1.0
- * @date 2025-01-27
+ * @version 1.1
+ * @date 2025-03-24
  * 
- * @copyright Copyright (c) 2023 Jose Luis Figueroa. MIT License.
+ * @copyright Copyright (c) 2025 Jose Luis Figueroa. MIT License.
  * 
  */
 /*****************************************************************************
@@ -63,18 +63,26 @@ const UsartConfig_t UsartConfig[] =
  * This function is used to initialize the USART based on the configuration 
  * table defined in usart_cfg module.
  * 
- * PRE-CONDITION: The configuration table needs to be populated (sizeof > 0)
+ * PRE-CONDITION: The configuration table needs to be populated (sizeof > 0) <br>
+ * 
  * POST-CONDITION: A constant pointer to the first member of the configuration
- * table is returned.
- * @return A pointer to the configuration table.
+ * table is returned. <br>
+ * 
+ * @return A pointer to the configuration table. <br>
  * 
  * \b Example:
  * @code
+ * #define SYSTEM_CLOCK    16000000
+ * #define APB1_CLOCK      SYSTEM_CLOCK
+ *
  * const UsartConfig_t * const UsartConfig = Usart_configGet();
+ * size_t configSize = USART_configSizeGet();
  * 
- * USART_Init(UsartConfig);
+ * USART_init(UsartConfig, APB1_CLOCK, configSize);
  * @endcode
  * 
+ * @see USART_ConfigGet
+ * @see USART_ConfigSizeGet
  * @see USART_Init
  * @see USART_Transmit
  * @see USART_Receive
@@ -90,4 +98,42 @@ const UsartConfig_t * const USART_configGet(void)
     */
     return (const UsartConfig_t *)&UsartConfig[0];
     
+}
+
+/*****************************************************************************
+ * Function: USART_getConfigSize()
+*/
+/**
+*\b Description:
+ * This function is used to get the size of the configuration table.
+ * 
+ * PRE-CONDITION: configuration table needs to be populated (sizeof > 0) <br>
+ * 
+ * POST-CONDITION: The size of the configuration table will be returned. <br>
+ * 
+ * @return The size of the configuration table.
+ * 
+ * \b Example: 
+ * @code
+ * #define SYSTEM_CLOCK    16000000
+ * #define APB1_CLOCK      SYSTEM_CLOCK
+ *
+ * const UsartConfig_t * const UsartConfig = Usart_configGet();
+ * size_t configSize = USART_configSizeGet();
+ * 
+ * USART_init(UsartConfig, APB1_CLOCK, configSize);
+ * @endcode
+ * 
+ * @see USART_configGet
+ * @see USART_configSizeGet
+ * @see USART_Init
+ * @see USART_Transmit
+ * @see USART_Receive
+ * @see USART_registerWrite
+ * @see USART_registerRead
+ * 
+*****************************************************************************/
+size_t USART_configSizeGet(void)
+{
+   return sizeof(UsartConfig)/sizeof(UsartConfig[0]);
 }

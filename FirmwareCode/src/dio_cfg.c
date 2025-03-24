@@ -71,7 +71,7 @@ const DioConfig_t DioConfig[] =
  * 
  * \b Example: 
  * @code
- * const Dio_Config_t * const DioConfig = DIO_configGet();
+ * const DioConfig_t * const DioConfig = DIO_configGet();
  * size_t configSize = DIO_configSizeGet();
  * 
  * DIO_Init(DioConfig, configSize);
@@ -112,7 +112,7 @@ const DioConfig_t * const DIO_configGet(void)
  * 
  * \b Example: 
  * @code
- * const Dio_Config_t * const DioConfig = DIO_configGet();
+ * const DioConfig_t * const DioConfig = DIO_configGet();
  * size_t configSize = DIO_configSizeGet();
  * 
  * DIO_Init(DioConfig, configSize);

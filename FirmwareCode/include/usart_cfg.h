@@ -5,10 +5,10 @@
  * configuration. This is the header file for the definition of the
  * interface for retrieving the Universal Synchronous/Asynchronous Receiver
  * Transmitter configuration table.
- * @version 1.0
- * @date 2025-01-26
+ * @version 1.1
+ * @date 2025-03-24
  * 
- * @copyright Copyright (c) 2023 Jose Luis Figueroa. MIT License.
+ * @copyright Copyright (c) 2025 Jose Luis Figueroa. MIT License.
  * 
  */
 #ifndef USART_CFG_H_
@@ -17,6 +17,7 @@
 /*****************************************************************************
  * Includes
 ******************************************************************************/
+#include <stdio.h>
 
 /*****************************************************************************
  * Preprocessor Constants
@@ -25,11 +26,6 @@
  * Defines the number of USART peripherals on the processor.
 */
 #define USART_PORTS_NUMBER 3U
-
-/** 
- * Set the value according with the number of USART peripheral
-*/
-#define USART_USED_PORTS 1U
 
 /*****************************************************************************
  * Typedefs
@@ -168,6 +164,7 @@ extern "C"{
 #endif
 
 const UsartConfig_t * const USART_configGet(void);
+size_t USART_configSizeGet(void);
 
 #ifdef __cplusplus
 } // extern C
