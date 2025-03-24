@@ -4,10 +4,10 @@
  * @brief The interface definition for the Universal Synchronous/Asynchronous 
  * Receiver Transmitter. This is the header file for the definition of the 
  * interface for a USART on a standard microcontroller.
- * @version 1.0
- * @date 2025-01-27
+ * @version 1.1
+ * @date 2025-03-24
  * 
- * @copyright Copyright (c) 2023 Jose Luis Figueroa. All rights reserved.
+ * @copyright Copyright (c) 2025 Jose Luis Figueroa. All rights reserved.
  * 
  */
 #ifndef USART_H_
@@ -25,7 +25,6 @@
 /*****************************************************************************
 * Preprocessor Constants
 *****************************************************************************/
-#define USART_ERROR_CODE_NONE   0x0000U /**< No error code*/
 
 /*****************************************************************************
 * Configuration Constants
@@ -38,6 +37,12 @@
 /*****************************************************************************
 * Typedefs
 *****************************************************************************/
+typedef struct 
+{
+    UsartPort_t Port;       /**< USART port*/
+    uint8_t *data;          /**< Data to be transmitted*/
+}UsartTransferConfig_t;
+
 
 /*****************************************************************************
 * Variables
@@ -50,9 +55,10 @@
 extern "C"{
 #endif
 
-void USART_init(const UsartConfig_t * const Config, const uint32_t peripheralClock);
-void USART_transmit(const UsartPort_t Port, const char * const data);
-void USART_receive(const UsartPort_t Port, char * const data);
+void USART_init(const UsartConfig_t * const Config, 
+const uint32_t peripheralClock, size_t configSize);  
+void USART_transmit(const UsartTransferConfig_t * const TransferConfig);
+void USART_receive(const UsartTransferConfig_t * const TransferConfig);
 void USART_registerWrite(const uint32_t address, const uint32_t value);
 uint32_t USART_registerRead(const uint32_t address);
 

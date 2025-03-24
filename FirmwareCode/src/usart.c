@@ -2,10 +2,10 @@
  * @file usart.c
  * @author Jose Luis Figueroa 
  * @brief The implementation for the USART driver.
- * @version 1.0
- * @date 2025-01-27
+ * @version 1.1
+ * @date 2025-03-24
  * 
- * @copyright Copyright (c) 2023 Jose Luis Figueroa. MIT License.
+ * @copyright Copyright (c) 2025 Jose Luis Figueroa. MIT License.
  * 
 */
 /*****************************************************************************
@@ -24,23 +24,6 @@
 /*****************************************************************************
 * Module Typedefs
 *****************************************************************************/
-/**
- * Defines the error code list for the USART configuration module.
- */
-typedef enum
-{
-    USART_ERROR_CODE_PORT=1,        /**< Invalid port*/
-    USART_ERROR_CODE_WORD_LENGTH,   /**< Invalid word length*/
-    USART_ERROR_CODE_STOP_BITS,     /**< Invalid stop bits*/
-    USART_ERROR_CODE_PARITY,        /**< Invalid parity*/
-    USART_ERROR_CODE_RX,            /**< Invalid RX mode*/
-    USART_ERROR_CODE_TX,            /**< Invalid TX mode*/
-    USART_ERROR_CODE_RX_DMA,        /**< Invalid RX DMA mode*/
-    USART_ERROR_CODE_TX_DMA,        /**< Invalid TX DMA mode*/
-    USART_ERROR_CODE_ENABLE,        /**< Invalid enable*/
-    USART_ERROR_CODE_BAUD_RATE,     /**< Invalid baud rate*/
-    USART_ERROR_CODE_MAX            /**< Maximum error*/
-}UsartCodeError_t;
 
 /*****************************************************************************
 * Module Variable Definitions
@@ -81,9 +64,6 @@ static uint32_t volatile * const dataRegister[USART_PORTS_NUMBER] =
     (uint32_t*)&USART1->DR, (uint32_t*)&USART2->DR, (uint32_t*)&USART6->DR
 };
 
-/* Defines the error code flag */
-volatile uint16_t USART_errorCodeFlag = USART_ERROR_CODE_NONE; /**< Error code flag*/
-
 /*****************************************************************************
 * Function Prototypes
 *****************************************************************************/
@@ -100,9 +80,10 @@ const uint32_t BaudRate);
     * This function is used to initialize the USART based on the configuration
     * table defined in usart_cfg module.
     * 
-    * PRE-CONDITION: The MCU clocks must be configured and enabled.
-    * PRE-CONDITION: The USART_PORTS_NUMBER > 0 
+    * PRE-CONDITION: The MCU clocks must be configured and enabled. <br>
     * PRE-CONDITION: Configuration table needs to be populated (sizeof>0) <br>
+    * PRE-CONDITION: The USART_PORTS_NUMBER > 0 <br>
+    * PRE-CONDITION: The setting is within the maximum values (USART_MAX). <br>
     * 
     * POST-CONDITION: The USART peripheral is set up with the configuration
     * table.
@@ -110,16 +91,23 @@ const uint32_t BaudRate);
     * @param[in]   Config is a pointer to the configuration table that contains
     * the initialization for the peripheral.
     * @param[in]   peripheralClock is the frequency of the system clock.
+    * @param[in]   configSize is the size of the configuration table.
     * 
     * @return void
     * 
     * \b Example:
     * @code
+    * #define SYSTEM_CLOCK    16000000
+    * #define APB1_CLOCK      SYSTEM_CLOCK
+    *
     * const UsartConfig_t * const UsartConfig = Usart_configGet();
-    * USART_Init(UsartConfig);
+    * size_t configSize = USART_configSizeGet();
+    * 
+    * USART_init(UsartConfig, APB1_CLOCK, configSize);
     * @endcode
     * 
     * @see USART_ConfigGet
+    * @see USART_ConfigSizeGet
     * @see USART_Init
     * @see USART_Transmit
     * @see USART_Receive
@@ -127,17 +115,14 @@ const uint32_t BaudRate);
     * @see USART_registerRead
     * 
 *****************************************************************************/
-void USART_init(const UsartConfig_t * const Config, const uint32_t peripheralClock)
+void USART_init(const UsartConfig_t * const Config, 
+const uint32_t peripheralClock, size_t configSize)
 {
     /* Loop through all the elements of the configuration table. */
-    for(uint8_t i=0; i<USART_USED_PORTS; i++)
+    for(uint8_t i=0; i<configSize; i++)
     {
-        /*Review if the USART port is correct*/
-        if(Config[i].Port >= USART_PORT_MAX)
-        {
-            USART_errorCodeFlag = USART_ERROR_CODE_PORT;
-            assert(USART_errorCodeFlag != USART_ERROR_CODE_PORT);
-        }
+        /* Prevent to assign a value out of the range of the port and pin.*/
+        assert(Config[i].Port < USART_PORT_MAX);
 
         /* Set the configuration of the USART on the control register 1*/
         /* Set the word length */
@@ -149,10 +134,9 @@ void USART_init(const UsartConfig_t * const Config, const uint32_t peripheralClo
         {
             *controlRegister1[Config[i].Port] &= ~USART_CR1_M;
         }
-        else if(Config[i].WordLength >= USART_WORD_LENGTH_MAX)
+        else 
         {
-            USART_errorCodeFlag = USART_ERROR_CODE_WORD_LENGTH;
-            assert(USART_errorCodeFlag != USART_ERROR_CODE_WORD_LENGTH);
+            assert(Config[i].WordLength < USART_WORD_LENGTH_MAX);
         }
 
         /* Set the number of stop bits */
@@ -176,10 +160,9 @@ void USART_init(const UsartConfig_t * const Config, const uint32_t peripheralClo
             *controlRegister2[Config[i].Port] |= USART_CR2_STOP_0;
             *controlRegister2[Config[i].Port] |= USART_CR2_STOP_1;
         }
-        else if(Config[i].StopBits >= USART_STOP_BITS_MAX)
+        else
         {
-            USART_errorCodeFlag = USART_ERROR_CODE_STOP_BITS;
-            assert(USART_errorCodeFlag != USART_ERROR_CODE_STOP_BITS);
+            assert(Config[i].StopBits < USART_STOP_BITS_MAX);
         }
 
         /* Set the parity */
@@ -191,10 +174,9 @@ void USART_init(const UsartConfig_t * const Config, const uint32_t peripheralClo
         {
             *controlRegister1[Config[i].Port] &= ~USART_CR1_PCE;
         }
-        else if(Config[i].Parity >= USART_PARITY_MAX)
+        else
         {
-            USART_errorCodeFlag = USART_ERROR_CODE_PARITY;
-            assert(USART_errorCodeFlag != USART_ERROR_CODE_PARITY);
+            assert(Config[i].Parity < USART_PARITY_MAX);
         }
 
         /* Set the RX mode */
@@ -206,10 +188,9 @@ void USART_init(const UsartConfig_t * const Config, const uint32_t peripheralClo
         {
             *controlRegister1[Config[i].Port] &= ~USART_CR1_RE;
         }
-        else if(Config[i].Rx >= USART_RX_MAX)
+        else
         {
-            USART_errorCodeFlag = USART_ERROR_CODE_RX;
-            assert(USART_errorCodeFlag != USART_ERROR_CODE_RX);
+            assert(Config[i].Rx < USART_RX_MAX);
         }
 
         /* Set the TX mode */
@@ -221,10 +202,9 @@ void USART_init(const UsartConfig_t * const Config, const uint32_t peripheralClo
         {
             *controlRegister1[Config[i].Port] &= ~USART_CR1_TE;
         }
-        else if(Config[i].Tx >= USART_TX_MAX)
+        else
         {
-            USART_errorCodeFlag = USART_ERROR_CODE_TX;
-            assert(USART_errorCodeFlag != USART_ERROR_CODE_TX);
+            assert(Config[i].Tx < USART_TX_MAX);
         }
 
         /* Set the configuration of the USART on the control register 3*/
@@ -237,10 +217,9 @@ void USART_init(const UsartConfig_t * const Config, const uint32_t peripheralClo
         {
             *controlRegister3[Config[i].Port] &= ~USART_CR3_DMAR;
         }
-        else if(Config[i].RxDma >= USART_RX_DMA_MAX)
+        else
         {
-            USART_errorCodeFlag = USART_ERROR_CODE_RX_DMA;
-            assert(USART_errorCodeFlag != USART_ERROR_CODE_RX_DMA);
+            assert(Config[i].RxDma < USART_RX_DMA_MAX);
         }
 
         /* Set the TX DMA mode */
@@ -252,10 +231,9 @@ void USART_init(const UsartConfig_t * const Config, const uint32_t peripheralClo
         {
             *controlRegister3[Config[i].Port] &= ~USART_CR3_DMAT;
         }
-        else if(Config[i].TxDma >= USART_TX_DMA_MAX)
+        else
         {
-            USART_errorCodeFlag = USART_ERROR_CODE_TX_DMA;
-            assert(USART_errorCodeFlag != USART_ERROR_CODE_TX_DMA);
+            assert(Config[i].TxDma < USART_TX_DMA_MAX);
         }
 
         /* Set the enable */
@@ -267,10 +245,9 @@ void USART_init(const UsartConfig_t * const Config, const uint32_t peripheralClo
         {
             *controlRegister1[Config[i].Port] &= ~USART_CR1_UE;
         }
-        else if(Config[i].Enable >= USART_UE_MAX)
+        else
         {
-            USART_errorCodeFlag = USART_ERROR_CODE_ENABLE;
-            assert(USART_errorCodeFlag != USART_ERROR_CODE_ENABLE);
+            assert(Config[i].Enable < USART_UE_MAX);
         }
 
         /* Set the configuration of the USART on the Baud Rate Register*/
@@ -295,10 +272,9 @@ void USART_init(const UsartConfig_t * const Config, const uint32_t peripheralClo
         {
             *baudRateRegister[Config[i].Port] = USART_baudRateCalculate(peripheralClock, 115200);
         }
-        else if(Config[i].BaudRate >= USART_BAUD_RATE_MAX)
+        else 
         {
-            USART_errorCodeFlag = USART_ERROR_CODE_BAUD_RATE;
-            assert(USART_errorCodeFlag != USART_ERROR_CODE_BAUD_RATE);
+            assert(Config[i].BaudRate < USART_BAUD_RATE_MAX);
         }
     
     }
@@ -309,44 +285,57 @@ void USART_init(const UsartConfig_t * const Config, const uint32_t peripheralClo
  * 
  *//**
     * \b Description:
-    * This function is used to transmit data over the USART bus.
+    * This function is used to transmit data over the USART bus. This function 
+    * is used to send data specified by the UsartTransferConfig_t structure
+    * which contains the port and data.
     * 
-    * PRE-CONDITION: The USART peripheral must be initialized (USART_init).
-    * PRE-CONDITION: The data must be populated.
+    * PRE-CONDITION: The USART peripheral must be initialized (USART_init). <br>
+    * PRE-CONDITION: The data must be populated. <br>
+    * PRE-CONDITION: UsartPortConfig_t must be populated (sizeof > 0). <br>
+    * PRE-CONDITION: The Port is within the maximum UsartPort_t. <br>
     * 
     * POST-CONDITION: The data is transmitted over the USART bus.
     * 
-    * @param[in]   Port is the USART port to transmit data. Populate using the 
-    *              UsartPort_t Port enum.
-    * @param[in]   Data is the data to be transmitted.
+    * @param[in]   TransferConfig is a pointer to the configuration table that
+    *             contains the data for the data transfer.
     * 
     * @return void
     * 
     * \b Example:
     * @code
-    * USART_transmit(USART2, data);
+    * const char txBuffer[14] = "Hello World!\n";
+    * UsartTransferConfig_t TransferConfig =
+    * {
+    *    .Port = USART2,
+    *    .data = &txBuffer[0]
+    * };
+    * USART_transmit(&TransferConfig);
     * @endcode
     * 
     * @see USART_ConfigGet
+    * @see USART_ConfigSizeGet
     * @see USART_Init
     * @see USART_Transmit
     * @see USART_Receive
     * @see USART_registerWrite
     * @see USART_registerRead
 *****************************************************************************/
-void USART_transmit(const UsartPort_t Port, const char * const data)
+void USART_transmit(const UsartTransferConfig_t * const TransferConfig)
 {
-    const char *auxiliarPointer = data;
+    /*Prevent to assign a value out of the range of the port.*/
+    assert(TransferConfig->Port < USART_PORT_MAX);
+
+    const uint8_t *auxiliarPointer = TransferConfig->data;
     while(*auxiliarPointer != '\0')
     {
         /* Wait for the transmit buffer to be empty */
-        while(!(*statusRegister[Port] & USART_SR_TXE))
+        while(!(*statusRegister[TransferConfig->Port] & USART_SR_TXE))
         {
             asm("nop");
         }
 
         /* Transmit the data */
-        *dataRegister[Port] = *auxiliarPointer;
+        *dataRegister[TransferConfig->Port] = *auxiliarPointer;
         auxiliarPointer++;
     }
 }
@@ -355,23 +344,35 @@ void USART_transmit(const UsartPort_t Port, const char * const data)
  * Function: USART_receive()
  *//**
     * \b Description:
-    * This function is used to receive data over the USART bus.
+    * This function is used to initialize a data reception on the USART bus. 
+    * This function is used to receive data specified by the 
+    * UsartTransferConfig_t structure, which contains the port and data.
     * 
-    * PRE-CONDITION: The USART peripheral must be initialized (USART_init).
+    * PRE-CONDITION: The USART peripheral must be initialized (USART_init). <br>
+    * PRE-CONDITION: The data must be populated. <br>
+    * PRE-CONDITION: UsartPortConfig_t must be populated. (sizeof > 0) <br>
+    * PRE-CONDITION: The Port is within the maximum UsartPort_t. <br>
     * 
     * POST-CONDITION: The data is received over the USART bus.
     * 
-    * @param[in]   Port is the USART port to receive data. Populate using the 
-    *              UsartPort_t Port enum.
+    * @param[in]   TransferConfig is a pointer to the configuration table that
+    *            contains the data for the data reception.
     * 
     * @return void
     * 
     * \b Example:
     * @code
-    * USART_receive(USART2, &data);
+    * char rxBuffer;
+    * UsartTransferConfig_t TransferConfig =
+    * {
+    *    .Port = USART2,
+    *    .data = &rxBuffer
+    * };
+    * USART_receive(&TransferConfig);
     * @endcode
     * 
     * @see USART_ConfigGet
+    * @see USART_ConfigSizeGet
     * @see USART_Init
     * @see USART_Transmit
     * @see USART_Receive
@@ -379,16 +380,16 @@ void USART_transmit(const UsartPort_t Port, const char * const data)
     * @see USART_registerRead
     * 
 *****************************************************************************/
-void USART_receive(const UsartPort_t Port, char * const data)
+void USART_receive(const UsartTransferConfig_t * const TransferConfig)
 {
     /* Wait for the receive buffer to be full */
-    while(!(*statusRegister[Port] & USART_SR_RXNE))
+    while(!(*statusRegister[TransferConfig->Port] & USART_SR_RXNE))
     {
         asm("nop");
     }
 
     /* Read the data */
-    *data = *dataRegister[Port];
+    *TransferConfig->data = *dataRegister[TransferConfig->Port];
 }
 
 /*****************************************************************************
@@ -400,11 +401,11 @@ void USART_receive(const UsartPort_t Port, char * const data)
     * the SPI peripheral that is not exposed by any other function of the
     * interface.
     * 
-    * PRE-CONDITION: The USART peripheral must be initialized (USART_init).
+    * PRE-CONDITION: The USART peripheral must be initialized (USART_init).<br>
     * PRE-CONDITION: Address is within the boundaries of the USART register
-    *                map.
+    *                map. <br>
     * 
-    * POST-CONDITION: The data is written to the address.
+    * POST-CONDITION: The data is written to the address.<br>
     * 
     * @param[in]   address is the address of the register to write to.
     * @param[in]   value is the value to write to the USART register.
@@ -413,10 +414,11 @@ void USART_receive(const UsartPort_t Port, char * const data)
     * 
     * \b Example:
     * @code
-    * USART_registerWrite(USART2, 0x01);
+    * USART_registerWrite(0x1000003, 0x01);
     * @endcode
     * 
     * @see USART_ConfigGet
+    * @see USART_ConfigSizeGet
     * @see USART_Init
     * @see USART_Transmit
     * @see USART_Receive
@@ -440,11 +442,11 @@ void USART_registerWrite(const uint32_t address, const uint32_t value)
     * the USART peripheral that is not exposed by any other function of the
     * interface.
     * 
-    * PRE-CONDITION: The USART peripheral must be initialized (USART_init).
+    * PRE-CONDITION: The USART peripheral must be initialized (USART_init). <br>
     * PRE-CONDITION: Address is within the boundaries of the USART register
-    *                map.
+    *                map. <br>
     * 
-    * POST-CONDITION: The data is read from the address.
+    * POST-CONDITION: The data is read from the address. <br>
     * 
     * @param[in]   address is the address of the register to read from.
     * 
@@ -452,10 +454,11 @@ void USART_registerWrite(const uint32_t address, const uint32_t value)
     * 
     * \b Example:
     * @code
-    * uint32_t value = USART_registerRead(USART2);
+    * uint32_t value = USART_registerRead(0x10000003);
     * @endcode
     * 
     * @see USART_ConfigGet
+    * @see USART_ConfigSizeGet
     * @see USART_Init
     * @see USART_Transmit
     * @see USART_Receive
@@ -492,6 +495,7 @@ uint32_t USART_registerRead(const uint32_t address)
     * @endcode
     * 
     * @see USART_ConfigGet
+    * @see USART_ConfigSizeGet
     * @see USART_Init
     * @see USART_Transmit
     * @see USART_Receive

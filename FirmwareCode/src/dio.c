@@ -114,7 +114,7 @@ static uint32_t volatile * const afrRegister[NUMBER_OF_PORTS] =
  * 
  * \b Example:
  * @code
- * const Dio_ConfigType_t * const DioConfig = DIO_configGet();
+ * const DioConfigType_t * const DioConfig = DIO_configGet();
  * size_t configSize = DIO_configSizeGet();
  * 
  * DIO_Init(DioConfig, configSize);
@@ -415,10 +415,7 @@ void DIO_init(const DioConfig_t * const Config, size_t configSize)
 **********************************************************************/
 DioPinState_t DIO_pinRead(const DioPinConfig_t * const PinConfig)
 {
-    /* Prevent to assign a value out of the range of the port and pin.
-     * The registers arrays are limited to the NUMBER_OF_PORTS, higher 
-     * value can cause a memory violation.
-    */
+    /* Prevent to assign a value out of the range of the port and pin.*/
     assert(PinConfig->Port < DIO_MAX_PORT);
     assert(PinConfig->Pin < DIO_MAX_PIN);
 
