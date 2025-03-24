@@ -4,10 +4,10 @@
  * @brief This module contains interface definitions for the Direct 
  * Memory Access (DMA) configuration. This is the header file for the 
  * definition of the interface for retrieving the DMA configuration table.
- * @version 0.1
- * @date 2025-01-29
+ * @version 1.1
+ * @date 2025-03-24
  * 
- * @copyright Copyright (c) 2025
+ * @copyright Copyright (c) 2025 Jose Luis Figueroa. MIT License.
  * 
  */
 #ifndef DMA_CFG_H_
@@ -16,6 +16,7 @@
 /*****************************************************************************
  * Includes
  *****************************************************************************/
+#include <stdio.h>
 
 /*****************************************************************************
  * Preprocessor Constants

@@ -3,10 +3,10 @@
  * @author Jose Luis Figueroa
  * @brief This module contains the implementation for the Direct Memory
  * Access peripheral configuration.
- * @version 1.0
- * @date 2025-01-29
+ * @version 1.1
+ * @date 2025-03-24
  * 
- * @copyright Copyright (c) 2023 Jose Luis Figueroa. MIT License.
+ * @copyright Copyright (c) 2025 Jose Luis Figueroa. MIT License.
  * 
 */
 /*****************************************************************************
@@ -65,20 +65,23 @@ const DmaConfig_t DmaConfig[] =
  * This function is used to initialize the DMA peripheral based on the
  * configuration table defined in dma_cfg module.
  * 
- * PRE-CONDITION: The configuration table must be populated with valid values.
+ * PRE-CONDITION: The configuration table must be populated (sizeof>0). <br>
  * 
  * POST-CONDITION: A constant pointer to the first member of the configuration
- * table is returned.
+ * table is returned. <br>
  * 
- * @return A pointer to the configuration table.
+ * @return A pointer to the configuration table. <br>
  * 
  * \b Example:
  * @code
  * const DmaConfig_t * const DmaConfig = Dma_configGet();
- * DMA_Init(DmaConfig);
+ * size_t configSize = DMA_configSizeGet();
+ * 
+ * DMA_init(UsartConfig, configSize);
  * @endcode
  * 
  * @see DMA_configGet
+ * @see DMA_getConfigSize
  * @see DMA_Init
  * @see DMA_transferConfig
  * 
@@ -90,4 +93,36 @@ const DmaConfig_t * const DMA_configGet(void)
      * pointer that can be modified
     */
     return (const DmaConfig_t *)&DmaConfig[0];   
+}
+
+/*****************************************************************************
+ * Function: DMA_getConfigSize()
+*/
+/**
+*\b Description:
+ * This function is used to get the size of the configuration table.
+ * 
+ * PRE-CONDITION: configuration table needs to be populated (sizeof > 0) <br>
+ * 
+ * POST-CONDITION: The size of the configuration table will be returned. <br>
+ * 
+ * @return The size of the configuration table.
+ * 
+ * \b Example: 
+ * @code
+ * const DmaConfig_t * const DmaConfig = Dma_configGet();
+ * size_t configSize = DMA_configSizeGet();
+ * 
+ * DMA_init(UsartConfig, configSize);
+ * @endcode
+ * 
+ * @see DMA_configGet
+ * @see DMA_getConfigSize
+ * @see DMA_Init
+ * @see DMA_transferConfig
+ * 
+*****************************************************************************/
+size_t DMA_configSizeGet(void)
+{
+   return sizeof(DmaConfig)/sizeof(DmaConfig[0]);
 }

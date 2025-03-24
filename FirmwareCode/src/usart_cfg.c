@@ -81,11 +81,11 @@ const UsartConfig_t UsartConfig[] =
  * USART_init(UsartConfig, APB1_CLOCK, configSize);
  * @endcode
  * 
- * @see USART_ConfigGet
- * @see USART_ConfigSizeGet
- * @see USART_Init
- * @see USART_Transmit
- * @see USART_Receive
+ * @see USART_configGet
+ * @see USART_configSizeGet
+ * @see USART_init
+ * @see USART_transmit
+ * @see USART_receive
  * @see USART_registerWrite
  * @see USART_registerRead
  * 
@@ -126,9 +126,9 @@ const UsartConfig_t * const USART_configGet(void)
  * 
  * @see USART_configGet
  * @see USART_configSizeGet
- * @see USART_Init
- * @see USART_Transmit
- * @see USART_Receive
+ * @see USART_init
+ * @see USART_transmit
+ * @see USART_receive
  * @see USART_registerWrite
  * @see USART_registerRead
  * 
