@@ -55,7 +55,7 @@ typedef struct
 extern "C"{
 #endif
 
-void DMA_init(const DmaConfig_t * const Config);
+void DMA_init(const DmaConfig_t * const Config, size_t configSize);
 void DMA_transferConfig(const DmaTransferConfig_t * const TransferConfig);
 
 #ifdef __cplusplus

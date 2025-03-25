@@ -56,7 +56,7 @@ const UsartConfig_t UsartConfig[] =
  * Function Definitions
 *****************************************************************************/
 /*****************************************************************************
- * Function: Usart_configGet()
+ * Function: USART_configGet()
  */
 /**
  * \b Description
@@ -75,7 +75,7 @@ const UsartConfig_t UsartConfig[] =
  * #define SYSTEM_CLOCK    16000000
  * #define APB1_CLOCK      SYSTEM_CLOCK
  *
- * const UsartConfig_t * const UsartConfig = Usart_configGet();
+ * const UsartConfig_t * const UsartConfig = USART_configGet();
  * size_t configSize = USART_configSizeGet();
  * 
  * USART_init(UsartConfig, APB1_CLOCK, configSize);
@@ -118,7 +118,7 @@ const UsartConfig_t * const USART_configGet(void)
  * #define SYSTEM_CLOCK    16000000
  * #define APB1_CLOCK      SYSTEM_CLOCK
  *
- * const UsartConfig_t * const UsartConfig = Usart_configGet();
+ * const UsartConfig_t * const UsartConfig = USART_configGet();
  * size_t configSize = USART_configSizeGet();
  * 
  * USART_init(UsartConfig, APB1_CLOCK, configSize);

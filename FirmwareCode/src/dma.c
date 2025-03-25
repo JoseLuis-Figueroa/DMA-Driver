@@ -122,7 +122,7 @@ static uint32_t volatile * const streamNumberOfData[DMA_PORTS_NUMBER] =
  * 
  * \b Example:
  * @code
- * const DmaConfig_t * const DmaConfig = Dma_configGet();
+ * const DmaConfig_t * const DmaConfig = DMA_configGet();
  * size_t configSize = DMA_configSizeGet();
  * 
  * DMA_init(DmaConfig, configSize);
@@ -130,14 +130,14 @@ static uint32_t volatile * const streamNumberOfData[DMA_PORTS_NUMBER] =
  * 
  * @see DMA_configGet
  * @see DMA_getConfigSize
- * @see DMA_Init
+ * @see DMA_init
  * @see DMA_transferConfig
  * 
 *****************************************************************************/
-void DMA_init(const DmaConfig_t * const Config)
+void DMA_init(const DmaConfig_t * const Config, size_t configSize)
 {
     /* Loop through all the elements of the configuration table. */
-    for(uint8_t i=0; i<DMA_USED_PORTS; i++)
+    for(uint8_t i=0; i<configSize; i++)
     {
         /*Review if the DMA port is correct*/
         assert(Config[i].Stream < DMA_PORTS_NUMBER);
@@ -355,7 +355,7 @@ void DMA_init(const DmaConfig_t * const Config)
  * 
  * \b Example:
  * @code
- * const DmaConfig_t * const DmaConfig = Dma_configGet();
+ * const DmaConfig_t * const DmaConfig = DMA_configGet();
  * size_t configSize = DMA_configSizeGet();
  * 
  * DMA_init(DmaConfig, configSize);
@@ -373,7 +373,7 @@ void DMA_init(const DmaConfig_t * const Config)
  * 
  * @see DMA_configGet
  * @see DMA_getConfigSize
- * @see DMA_Init
+ * @see DMA_init
  * @see DMA_transferConfig
  * 
 */

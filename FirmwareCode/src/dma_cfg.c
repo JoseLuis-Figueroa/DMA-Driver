@@ -58,7 +58,7 @@ const DmaConfig_t DmaConfig[] =
  * Function Definitions
 *****************************************************************************/
 /*****************************************************************************
- * Function: Dma_configGet()
+ * Function: DMA_configGet()
  */
 /**
  * \b Description
@@ -74,7 +74,7 @@ const DmaConfig_t DmaConfig[] =
  * 
  * \b Example:
  * @code
- * const DmaConfig_t * const DmaConfig = Dma_configGet();
+ * const DmaConfig_t * const DmaConfig = DMA_configGet();
  * size_t configSize = DMA_configSizeGet();
  * 
  * DMA_init(UsartConfig, configSize);
@@ -82,7 +82,7 @@ const DmaConfig_t DmaConfig[] =
  * 
  * @see DMA_configGet
  * @see DMA_getConfigSize
- * @see DMA_Init
+ * @see DMA_init
  * @see DMA_transferConfig
  * 
  */
@@ -110,7 +110,7 @@ const DmaConfig_t * const DMA_configGet(void)
  * 
  * \b Example: 
  * @code
- * const DmaConfig_t * const DmaConfig = Dma_configGet();
+ * const DmaConfig_t * const DmaConfig = DMA_configGet();
  * size_t configSize = DMA_configSizeGet();
  * 
  * DMA_init(UsartConfig, configSize);
@@ -118,7 +118,7 @@ const DmaConfig_t * const DMA_configGet(void)
  * 
  * @see DMA_configGet
  * @see DMA_getConfigSize
- * @see DMA_Init
+ * @see DMA_init
  * @see DMA_transferConfig
  * 
 *****************************************************************************/

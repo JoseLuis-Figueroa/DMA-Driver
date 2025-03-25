@@ -1,54 +1,23 @@
 /**
  * @file main.c
  * @author Jose Luis Figueroa
- * @brief LFX Coding Challenge: DMA-based UART Communication
+ * @brief UART Communication using the Direct Memory Access (DMA).
+ * Design and implement a program for a Nucleo-F401RE board to demonstrate 
+ * Direct  Memory Access (DMA) for efficient data transfer between UART 
+ * peripheral and transmitter and receiver buffers defined in data memory  
+ * (RAM). The goal is to bypass the CPU for data handling while ensuring 
+ * robust  UART communication. The DMA controller is configured to:
+ *     o Transmit a predefined data buffered in RAM via UART.
+ *     o Simultaneously receive data from the UART and store it in a separate 
+ *       buffer.
+ *     o Write all configurations (UART, DMA, clock, GPIO) directly using 
+ *       hardware registers. 
  * 
- * Challenge Overview:
- * Design and implement a program for a Nucleo-F401RE board of the STM32F4
- * microcontroller family from STMicroelectronics to demonstrate Direct 
- * Memory Access (DMA) for efficient data transfer between UART peripheral
- * and transmitter and receiver buffers defined in data memory (RAM). 
- * The goal is to bypass the CPU for data handling while ensuring robust 
- * UART communication. Participants are restricted from using HAL libraries 
- * and must directly manipulate hardware registers. You can use the register 
- * map header file.
- * 
- * Challenge Requirements:
- * 1. Direct DMA Implementation:
- * Configure the DMA controller to:
- *      o Transmit a predefined data buffered in RAM via UART.
- *      o Simultaneously receive data from the UART and store it in a separate 
- *        buffer.
- * 2. Custom Register-Level Programming:
- * Write all configurations (UART, DMA, clock, GPIO) directly using hardware
- * registers. HAL library usage is prohibited.
- * 3. Visualization in Simulator:
- * Test the code on the simulator. Step wise run the code in the debugger and
- * see the register values being updated. Check the DMASTATUS register for the
- * state of the transfer.
- * 4. Challenge Objectives:
- *      o Properly configure UART and DMA without using HALfunctions.
- *      o Ensure efficient data handling with minimal CPU involvement.
- *      o Demonstrate understanding of the peripherals and DMA operation.
- * 
- * Input and Output:
- * Input: A predefined string to be transmitted through UART.
- * Output: The same string received back through UART and stored in a buffer.
- * (For simulation, you can use loopback mode if needed.)
- * 
- * Deliverables:
- * 1. Source Code: A complete program written in C.
- * 2. Video Submission:
- *      o Explain the code's functionality and implementation.
- *      o Demonstrate the program's working using the simulator.
- * 3. Optional Documentation: A brief text or PDF document summarizing the 
- *    key points of the implementation.
- * 
- * @version 1.0
- * @date 2025-01-24
+ * @version 1.1
+ * @date 2025-03-25
  * @note 
  * 
- * @copyright Copyright (c) 2023 Jose Luis Figueroa. MIT License.
+ * @copyright Copyright (c) 2025 Jose Luis Figueroa. MIT License.
  * 
 */
 /*****************************************************************************
@@ -80,24 +49,47 @@ int main(void)
 
     /*Get the address of the configuration table for DIO*/
     const DioConfig_t * const DioConfig = DIO_configGet();
+    /*Get the size of the configuration table*/
+    size_t configSizeDio = DIO_configSizeGet();
     /*Initialize the DIO pins according to the configuration table*/
-    DIO_init(DioConfig);
+    DIO_init(DioConfig, configSizeDio);
 
     /*Get the address of the configuration table for USART*/
     const UsartConfig_t * const UsartConfig = USART_configGet();
+    /*Get the size of the configuration table*/
+    size_t configSizeUsart = USART_configSizeGet();
     /*Initialize the USART peripheral according to the configuration table*/
-    USART_init(UsartConfig, APB1_CLOCK);
+    USART_init(UsartConfig, configSizeUsart, APB1_CLOCK);
 
     /*Get the address of the configuration table for DMA*/
     const DmaConfig_t * const DmaConfig = DMA_configGet();
+    /*Get the size of the configuration table*/
+    size_t configSizeDma = DMA_configSizeGet();
     /*Initialize the DMA peripheral according to the configuration table*/
-    DMA_init(DmaConfig);
+    DMA_init(DmaConfig, configSizeDma);
+
+    /*Configure the DMA peripheral for a transfer to memory*/
+    DmaTransferConfig_t DmaTxConfig =
+    {
+        .Stream = DMA1_STREAM_6,
+        .peripheral = (uint32_t*)&USART2->DR,
+        .memory = (uint32_t*)&txBuffer[0],
+        .length = sizeof(txBuffer)/sizeof(txBuffer[0])
+    };
+
+    DmaTransferConfig_t DmaRxConfig =
+    {
+        .Stream = DMA1_STREAM_5,
+        .peripheral = (uint32_t*)&USART2->DR,
+        .memory = (uint32_t*)&rxBuffer,
+        .length = sizeof(rxBuffer)/sizeof(rxBuffer)
+    };
 
     /*Configure the DMA peripheral (USART_TX) for a transfer to memory*/
-    DMA_transferConfig(DMA1_STREAM_6, (uint32_t*)&USART2->DR, (uint32_t*)&txBuffer[0], sizeof(txBuffer));
+    DMA_transferConfig(&DmaTxConfig);
 
     /*Configure the DMA peripheral (USART_RX) for receiving data from memory*/
-    DMA_transferConfig(DMA1_STREAM_5, (uint32_t*)&USART2->DR, (uint32_t*)&rxBuffer, sizeof(rxBuffer));
+    DMA_transferConfig(&DmaRxConfig);
 
     while(1)
     {

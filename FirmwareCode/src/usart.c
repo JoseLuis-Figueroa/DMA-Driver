@@ -100,7 +100,7 @@ const uint32_t BaudRate);
     * #define SYSTEM_CLOCK    16000000
     * #define APB1_CLOCK      SYSTEM_CLOCK
     *
-    * const UsartConfig_t * const UsartConfig = Usart_configGet();
+    * const UsartConfig_t * const UsartConfig = USART_configGet();
     * size_t configSize = USART_configSizeGet();
     * 
     * USART_init(UsartConfig, APB1_CLOCK, configSize);
@@ -116,7 +116,7 @@ const uint32_t BaudRate);
     * 
 *****************************************************************************/
 void USART_init(const UsartConfig_t * const Config, 
-const uint32_t peripheralClock, size_t configSize)
+    size_t configSize, const uint32_t peripheralClock)
 {
     /* Loop through all the elements of the configuration table. */
     for(uint8_t i=0; i<configSize; i++)

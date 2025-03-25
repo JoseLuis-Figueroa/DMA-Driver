@@ -26,11 +26,6 @@
 */
 #define DMA_PORTS_NUMBER 16U
 
-/** 
- * Set the value according with the number of the DMA streams used.
-*/
-#define DMA_USED_PORTS 2U
-
 /*****************************************************************************
  * Typedefs
 ******************************************************************************/

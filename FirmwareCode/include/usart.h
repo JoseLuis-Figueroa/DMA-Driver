@@ -55,7 +55,7 @@ extern "C"{
 #endif
 
 void USART_init(const UsartConfig_t * const Config, 
-const uint32_t peripheralClock, size_t configSize);  
+size_t configSize, const uint32_t peripheralClock);  
 void USART_transmit(const UsartTransferConfig_t * const TransferConfig);
 void USART_receive(const UsartTransferConfig_t * const TransferConfig);
 void USART_registerWrite(const uint32_t address, const uint32_t value);
