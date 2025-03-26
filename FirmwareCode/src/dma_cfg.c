@@ -32,7 +32,7 @@
 /**
  * The following array contains the configuration data for each DMA peripheral.
  * Each row represent a single DMA stream. Each column is representing a 
- * member of the DmaConfig_t structure. This table is read in by Dma_Init, where
+ * member of the DmaConfig_t structure. This table is read in by DMA_init, where
  * each peripheral is then set up based on this table.
  */
 const DmaConfig_t DmaConfig[] = 

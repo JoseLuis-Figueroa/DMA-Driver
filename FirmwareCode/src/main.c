@@ -77,6 +77,7 @@ int main(void)
         .length = sizeof(txBuffer)/sizeof(txBuffer[0])
     };
 
+    /*Configure the DMA peripheral for receiving data from memory*/
     DmaTransferConfig_t DmaRxConfig =
     {
         .Stream = DMA1_STREAM_5,
