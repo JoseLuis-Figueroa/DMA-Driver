@@ -87,4 +87,12 @@ The `DmaTxConfig` and `DmaRxConfig` structures define the configuration paramete
     DMA_transferConfig(&DmaRxConfig);
 ```
 
+The following video showcases the UART implementation using Direct Memory Access (DMA) with the **PuTTY** program for serial communication. It illustrates the step-by-step updates of UART and DMA **registers** on the DMA_transferConfig function, as well as the real-time modifications of the transmit (**txBuffer**) and receive (**rxBuffer**) buffers in RAM.
+
+![Implementation](https://github.com/JoseLuis-Figueroa/DMA-Driver/blob/main/Documentation/doxygen/images/Output_gif.gif)
+
+## Conclusion
+
+This project demonstrates the efficient use of Direct Memory Access (DMA) for UART communication. By leveraging DMA, data transfers occur independently of the CPU, reducing processing overhead and improving system efficiency. The implementation highlights the seamless interaction between the UART peripheral, DMA controller, and memory buffers, ensuring reliable data transmission and reception. This approach is particularly beneficial for embedded systems requiring high-speed, low-latency communication while optimizing CPU resources for other critical tasks.
+
 
