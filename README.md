@@ -1,18 +1,98 @@
-#  UART Communication Using DMA
-
-## Introduction
+# UART Communication Using DMA
 
 This repository focuses on implementing **UART communication using Direct Memory Access (DMA)**. The primary objective is to design and develop a program that enables efficient **data transfer between the UART peripheral and memory buffers (RAM)** without CPU intervention. By leveraging DMA, the system can offload data handling tasks from the CPU, improving overall performance and reducing power consumption. This approach ensures **seamless UART communication** while optimizing system resources, making it a crucial technique for embedded systems that require high-speed data transfer with minimal latency.
 
-This project configures the data transfer by integrating reusable **DIO, UART, and DMA** drivers. Developed in **embedded C (bare-metal)**, it directly interacts with the microcontroller's (MCU) register map, adhering to industry-standard coding practices such as **MISRA-C**.
+The system leverages **reusable DMA, UART, and DIO drivers**, written in **Embedded C (bare-metal)**, and adheres to **MISRA-C** guidelines. This design is highly reusable, scalable, and suitable for performance-constrained embedded systems.
 
-## Project Overview
+---
 
-This repository focuses on creating **reusable drivers** and **Hardware Abstraction Layers (HALs)** for microcontrollers. The tools used in this project include:
+## Table of Contents
 
-- **Development Board:** _Nucleo-F401RE._
-- **IDE/Debugger:** _Visual Studio Code (PlatformIO extension)._
-- **Compiler Toolchain:** _GNU ARM Embedded Toolchain._
+1. [About the Project](#about-the-project)  
+2. [Project Status](#project-status)  
+3. [Getting Started](#getting-started)  
+   1. [Dependencies](#dependencies)  
+   2. [Getting the Source](#getting-the-source)  
+   3. [Building](#building)  
+   4. [Running Tests](#running-tests)  
+   5. [Installation](#installation)  
+4. [Usage](#usage)  
+5. [Release Process](#release-process)  
+6. [How to Get Help](#how-to-get-help)  
+7. [Contributing](#contributing)  
+8. [Further Reading](#further-reading)  
+9. [License](#license)  
+10. [Authors](#authors)  
+11. [Acknowledgments](#acknowledgments)  
+
+---
+
+## About the Project
+
+This project demonstrates **UART data transfer using DMA** to offload data handling from the CPU. The implementation directly configures **USART2** (PA2 = TX, PA3 = RX) and uses DMA streams for bidirectional communication between memory and the UART peripheral.
+
+The architecture supports **layered firmware abstraction** (Drivers ↔ HAL ↔ Application) and promotes **modularity** and **testability**.
+
+### Key Features
+
+- DMA-based full-duplex UART communication.  
+- Efficient transmission/reception without CPU overhead.  
+- Dynamic DMA stream configuration via `DMA_transferConfig()`.  
+- 8-bit data size for both memory and peripheral.  
+- Reusable, MISRA-compliant embedded drivers.
+
+### Technical Details
+
+- **Microcontroller Platform:** STM32F401RE (ARM Cortex-M4).  
+- **MCU Board:** Nucleo-F401RE.  
+- **Language:** Embedded C (Bare-Metal).  
+- **Coding Standard:** MISRA-C.  
+- **Tools:**
+  - **IDE:** VS Code with PlatformIO.  
+  - **Toolchain:** GNU ARM Embedded.  
+  - **Terminal:** PuTTY (for UART serial interface).  
+  - **Documentation:** Doxygen.  
+
+**[Back to top](#table-of-contents)**
+
+---
+
+## Project Status
+
+![Build Status](https://img.shields.io/badge/build-passing-brightgreen)
+
+Current Version: `v1.1`  
+Tested On: `Nucleo-F401RE`  
+
+- ✅ DMA Driver Integration  
+- ✅ UART Initialization  
+- ✅ UART DMA TX/RX Transfer  
+- ✅ Verified with PuTTY Serial Monitor
+- ⏳ Unit Testing (Planned).
+
+**[Back to top](#table-of-contents)**
+
+---
+
+
+## Getting Started
+
+This section helps you set up and run the project on supported STM32 MCUs.
+
+### Dependencies
+
+Install the following tools:
+- [Visual Studio Code](https://code.visualstudio.com/) with [PlatformIO extension](https://platformio.org/install)  
+- [GNU ARM Embedded Toolchain](https://developer.arm.com/downloads/-/gnu-rm)  
+- [STM32Cube Drivers](https://www.st.com/en/ecosystems/stm32cube.html) (via PlatformIO)  
+- [Doxygen](https://doxygen.nl/manual/install.html)  
+
+
+
+
+
+
+
 
 ## Settings Configuration
 
