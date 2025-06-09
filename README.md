@@ -74,7 +74,6 @@ Tested On: `Nucleo-F401RE`
 
 ---
 
-
 ## Getting Started
 
 This section helps you set up and run the project on supported STM32 MCUs.
@@ -87,34 +86,79 @@ Install the following tools:
 - [STM32Cube Drivers](https://www.st.com/en/ecosystems/stm32cube.html) (via PlatformIO)  
 - [Doxygen](https://doxygen.nl/manual/install.html)  
 
+### Getting the Source
+
+Clone the GitHub repository:
+
+```bash
+git clone https://github.com/JoseLuis-Figueroa/DMA-Driver
+cd DMA-Driver
+```
+
+### Building
+
+You can build the project using either the **PlatformIO extension in Visual Studio Code** or the **PlatformIO CLI**.
+
+- **Build using the PlatformIO Toolbar (GUI):** If you're using VS Code with the PlatformIO extension, simply click the "_Build_" button in the PlatformIO toolbar. This will compile your project using the selected environment in your `platformio.ini`.
+
+- **Build using the PlatformIO CLI:** From the project's root directory, run the following command to build all environments defined in `platformio.ini`:
+
+```
+pio run
+```
+
+- **Build specific environments in CLI:** run the following command to build a specific environment:
+
+```
+pio run -e nucleo_f401re
+```
+
+### Running Tests
+
+You can test on actual hardware by uploading the code using the **PlatformIO extension in Visual Studio Code** or the **PlatformIO CLI**:
+
+- **Run and debug using the PlatformIO Toolbar (GUI):** If you're using VS Code with the PlatformIO extension, simply click the "_Run and Debug_" button in the PlatformIO toolbar. This will run and debug your project using the selected environment in your `platformio.ini`.
+
+- **Build using the PlatformIO CLI:** From the project's root directory, run the following command to upload all environments defined in `platformio.ini`:
+
+```
+pio run --target upload
+```
+
+You can verify output with **PuTTY** or another serial terminal.
+
+### Installation
+
+No additional installation required. Flash the firmware directly via ST-Link (automatically handled by PlatformIO).
+
+**[Back to top](#table-of-contents)**
+
+---
+
+## Usage
+
+The firmware initializes all necessary peripherals and configures **DMA for memory ↔ UART data transfer** using `DMA_transferConfig()`.
+
+### UART Settings
+
+- **Port:** _USART2._
+- **TX Pin:** _PA2._  
+- **RX Pin:** _PA3._  
+- **Word Length:** _8 bits._  
+- **Stop Bits:** _1._  
+- **Parity:** _None_  
+- **Mode:** _TX & RX enabled._  
+- **DMA Mode:** _Enabled for both TX and RX._  
+
+### DMA Settings
+
+| DMA Role | Stream       | Channel | Direction              | Memory Size | Peripheral Size  |
+|----------|--------------|---------|------------------------|-------------|------------------|
+| TX       | DMA1_Stream6 | Ch. 4   | Peripheral → Memory    | 8-bit       | 8-bit            |
+| RX       | DMA1_Stream5 | Ch. 4   | Memory → Peripheral    | 8-bit       | 8-bit            |
 
 
-
-
-
-
-
-## Settings Configuration
-
-The implementation configures the **USART2** port (PA2=TX, and PA3=RX) as a **UART interface** to use the **DMA** for efficient data transfer. The UART settings include:
-
-- **Data word length:** _start bit 1, data bits 8, and stop bits (TBD)._
-- **Stop bits:** _1 bit._
-- **Parity bit:** _1 bit._
-- **Rx mode:** _Enabled._
-- **Tx mode:** _Enabled._
-- **TX DMA mode:** _Enabled._
-- **RX DMA mode:** _Enabled._
-
-The DMA is configured as follows:  
-- **Channel:** _Channel 4._
-- **Stream 6**: Transfers peripheral data (**UART as TX**) to **memory (RAM)**.  
-- **Stream 5**: Receives data from **memory (RAM)** to the **peripheral (UART RX)**.  
-- **Memory data size:** _8 bits._
-- **Peripheral data size:** _8 bits._
-- **Data Managment mode:** _FIFO._ 
-
-## Application Implementation 
+### Application Implementation 
 
 The `DIO_init`, `USART_init`, and `DMA_init` functions initialize the peripherals for data transfer.
 
@@ -140,6 +184,9 @@ The `DIO_init`, `USART_init`, and `DMA_init` functions initialize the peripheral
     /*Initialize the DMA peripheral according to the configuration table*/
     DMA_init(DmaConfig, configSizeDma);
 ```
+
+### DMA Transfer Configuration
+
 The `DmaTxConfig` and `DmaRxConfig` structures define the configuration parameters used by the `DMA_transferConfig` function to set up the data transfer process.
 ```c
   /*Configure the DMA peripheral for a transfer to memory*/
@@ -171,8 +218,62 @@ The following video showcases the UART implementation using Direct Memory Access
 
 ![Implementation](https://github.com/JoseLuis-Figueroa/DMA-Driver/blob/main/Documentation/doxygen/images/Output_gif.gif)
 
-## Conclusion
+## Release Process
 
-This project demonstrates the efficient use of Direct Memory Access (DMA) for UART communication. By leveraging DMA, data transfers occur independently of the CPU, reducing processing overhead and improving system efficiency. The implementation highlights the seamless interaction between the UART peripheral, DMA controller, and memory buffers, ensuring reliable data transmission and reception. This approach is particularly beneficial for embedded systems requiring high-speed, low-latency communication while optimizing CPU resources for other critical tasks.
+### Versioning
 
+We use [Semantic Versioning](http://semver.org/).  
+Latest release: **v1.1.**
+
+### Payload
+
+- `v1.0`: Initial UART-DMA driver release.
+- `v1.1`: Updated documentation, structural improvements, and design by contract enhancements.
+
+**[Back to top](#table-of-contents)**
+
+---
+
+## How to Get Help
+
+- [Open an issue](https://github.com/JoseLuis-Figueroa/adxl345-driver/issues)
+- Message me via my GitHub profile.
+
+---
+
+## Contributing
+
+Contributions are welcome!  
+Please refer to [CONTRIBUTING.md](Documentation/CONTRIBUTING.md) for details.
+
+**[Back to top](#table-of-contents)**
+
+---
+
+## Further Reading
+
+- [STM32F4 Reference Manual](https://www.st.com/resource/en/reference_manual/dm00031020.pdf)
+- [MISRA-C Guidelines](https://www.misra.org.uk/)
+- [Jacob Beningo: Reusable Firmware Development](https://www.beningo.com/)
+
+---
+
+## License
+
+Licensed under the MIT License – see [LICENSE.md](LICENSE) for details.
+
+---
+
+## Authors
+
+**[JoseLuis-Figueroa](https://github.com/JoseLuis-Figueroa)** – Developer & Maintainer
+
+---
+
+## Acknowledgments
+
+- [Beningo Embedded Group](https://www.beningo.com/)
+- [PlatformIO](https://platformio.org/)
+
+**[Back to top](#table-of-contents)**
 
