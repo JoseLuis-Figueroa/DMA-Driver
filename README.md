@@ -21,9 +21,8 @@ The system leverages **reusable DMA, UART, and DIO drivers**, written in **Embed
 6. [How to Get Help](#how-to-get-help)  
 7. [Contributing](#contributing)  
 8. [Further Reading](#further-reading)  
-9. [License](#license)  
-10. [Authors](#authors)  
-11. [Acknowledgments](#acknowledgments)  
+9. [Authors](#authors)  
+10. [Acknowledgments](#acknowledgments)  
 
 ---
 
@@ -236,7 +235,7 @@ Latest release: **v1.1.**
 
 ## How to Get Help
 
-- [Open an issue](https://github.com/JoseLuis-Figueroa/adxl345-driver/issues)
+- [Open an issue](https://github.com/JoseLuis-Figueroa/UART-DMA-Driver/issues)
 - Message me via my GitHub profile.
 
 ---
@@ -255,12 +254,6 @@ Please refer to [CONTRIBUTING.md](Documentation/CONTRIBUTING.md) for details.
 - [STM32F4 Reference Manual](https://www.st.com/resource/en/reference_manual/dm00031020.pdf)
 - [MISRA-C Guidelines](https://www.misra.org.uk/)
 - [Jacob Beningo: Reusable Firmware Development](https://www.beningo.com/)
-
----
-
-## License
-
-Licensed under the MIT License – see [LICENSE.md](LICENSE) for details.
 
 ---
 
